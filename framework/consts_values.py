@@ -1,5 +1,5 @@
-# this file only holds const variables, objects used in this project
-NUMBER_OF_OF_BLOCKS = (32, 18)
+# this file only holds const values and objects used in this project
+NUMBER_OF_OF_BLOCKS = (64, 36)
 
 
 # object holding colours

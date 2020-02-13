@@ -1,7 +1,7 @@
 # imports
 from abc import abstractmethod
-from abstractObjectFile import AbtractBlock
-from constsFile import Color, Blocks
+from blocks.abstract_block import AbtractBlock
+from framework.consts_values import Color, Blocks
 
 
 # background - block in which you can move into without any problem
@@ -13,7 +13,3 @@ class Background(AbtractBlock):
     @abstractmethod
     def __bool__(self):
         return True
-
-    @abstractmethod
-    def render(self, screen):
-        super().render(screen)

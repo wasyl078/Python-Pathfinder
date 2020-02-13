@@ -2,9 +2,9 @@
 import pygame
 import sys
 import random
-from playerFile import Player
-from matrixFile import Matrix
-from constsFile import NUMBER_OF_OF_BLOCKS, Color
+from blocks.player_block import Player
+from framework.matrix_of_blocks import Matrix
+from framework.consts_values import NUMBER_OF_OF_BLOCKS, Color
 
 
 # game class - update and render
@@ -23,7 +23,8 @@ class Game(object):
         pygame.init()
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.matrix = Matrix(NUMBER_OF_OF_BLOCKS[1], NUMBER_OF_OF_BLOCKS[0])
-        self.moveable_objects = [Player(0, 0)]
+        self.player = Player(0, 0)
+        self.moveable_objects = [self.player]
         self.initizalize_level()
 
     # making background blocks
@@ -44,6 +45,7 @@ class Game(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     sys.exit()
+                self.player.update_single_jump(self.matrix, event)
 
             # updates handling
             self.tps_delta += self.tps_clock.tick() / 1000.0
@@ -60,12 +62,12 @@ class Game(object):
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
                 self.matrix.matrix[i][j].update(self.matrix)
-        for object_to_update in self.moveable_objects:
-            object_to_update.update(self.matrix)
+        # for object_to_update in self.moveable_objects:
+        #    object_to_update.update(self.matrix)
 
     # drawing every object
     def render(self):
-        self.screen.fill(Color.PINK)
+        self.screen.fill(Color.BLACK)
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
                 self.matrix.matrix[i][j].render(self.screen)

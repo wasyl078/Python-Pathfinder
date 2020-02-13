@@ -1,6 +1,6 @@
 # imports
-from backgroundFile import Background
-from wallFile import Wall
+from blocks.background_block import Background
+from blocks.wall_block import Wall
 
 # matrix class - 2-dimensional table -
 # used to check whether position in window is free
