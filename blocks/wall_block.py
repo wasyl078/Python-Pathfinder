@@ -1,7 +1,7 @@
 # imports
 from abc import abstractmethod
 from blocks.abstract_block import AbtractBlock
-from framework.consts_values import Color, Blocks
+from general.consts_values import Color, Blocks
 
 
 # wall - block in which you can't move into

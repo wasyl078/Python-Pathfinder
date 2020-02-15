@@ -4,8 +4,8 @@ import sys
 import random
 import ctypes
 from blocks.player_block import Player
-from framework.matrix_of_blocks import Matrix
-from framework.consts_values import NUMBER_OF_OF_BLOCKS, Color
+from general.matrix_of_blocks import Matrix
+from general.consts_values import NUMBER_OF_OF_BLOCKS, Color
 import time
 
 

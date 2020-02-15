@@ -1,7 +1,7 @@
 # imports
 import pygame
 from abc import abstractmethod
-from framework.consts_values import *
+from general.consts_values import *
 
 
 # abstract class for objects contains every important variables for standard block in game

@@ -1,7 +1,7 @@
 # imports
 import pygame
 from blocks.abstract_block import AbtractBlock, abstractmethod
-from framework.consts_values import Blocks, Color
+from general.consts_values import Blocks, Color
 
 
 # player is standard player character
