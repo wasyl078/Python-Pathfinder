@@ -9,7 +9,6 @@ class Player(AbtractBlock):
     # constructor - setting player object
     def __init__(self, posx, posy):
         super().__init__(posx, posy, Color.GREEN, Blocks.PLAYER)
-        print("player ")
 
     # player's update is handling keyboard events
     @abstractmethod
@@ -27,7 +26,6 @@ class Player(AbtractBlock):
 
     # another way to handle keyboard events by Player
     def update_single_jump(self, matrix, event):
-
         if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
             if matrix.check(self.position_x + 1, self.position_y):
                 self.position_x += 1
