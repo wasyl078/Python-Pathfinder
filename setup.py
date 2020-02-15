@@ -7,7 +7,7 @@ base = None
 
 
 setup(name="Pathifinder",
-      version="1.0",
+      version="1.4",
       description="My GUI application!",
       options={"build_exe": build_exe_options},
       executables=[Executable("pathfinder_v1.py", base=base)])
