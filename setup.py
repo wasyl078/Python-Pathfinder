@@ -11,3 +11,4 @@ setup(name="Pathifinder",
       description="My GUI application!",
       options={"build_exe": build_exe_options},
       executables=[Executable("pathfinder_v1.py", base=base)])
+
