@@ -2,6 +2,7 @@
 import pygame
 import sys
 import random
+import ctypes
 from blocks.player_block import Player
 from framework.matrix_of_blocks import Matrix
 from framework.consts_values import NUMBER_OF_OF_BLOCKS, Color
@@ -76,6 +77,9 @@ class Game(object):
             object_to_render.render(self.screen)
         pygame.display.flip()
 
+
+# avoiding display scalling by windows "maku UI larger / smaller"
+ctypes.windll.user32.SetProcessDPIAware()
 
 # staring game
 actual_game = Game()
