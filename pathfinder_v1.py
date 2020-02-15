@@ -5,7 +5,7 @@ import random
 from blocks.player_block import Player
 from framework.matrix_of_blocks import Matrix
 from framework.consts_values import NUMBER_OF_OF_BLOCKS, Color
-
+import time
 
 # game class - update and render
 class Game(object):
@@ -80,3 +80,6 @@ class Game(object):
 if __name__ == "__main__":
     actual_game = Game()
     actual_game.game_loop()
+else:
+    print("doesnt work")
+    time.sleep(5)
