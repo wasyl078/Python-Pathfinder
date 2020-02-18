@@ -7,7 +7,7 @@ from blocks.wall_block import Wall
 
 
 class Matrix(object):
-    def __init__(self, number_of_rows, number_of_columns):
+    def __init__(self, number_of_columns, number_of_rows):
         self.columns = number_of_columns
         self.rows = number_of_rows
         self.matrix = self.initialize_matrix()

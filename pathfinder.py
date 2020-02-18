@@ -1,12 +1,13 @@
 # imports
 import pygame
 import sys
+from time import sleep
 import random
 import ctypes
 from blocks.player_block import Player
 from general.matrix_of_blocks import Matrix
 from general.consts_values import NUMBER_OF_OF_BLOCKS, Color
-import time
+from graphs.graph import MyOwnGraph
 
 
 # game class - update and render
@@ -24,19 +25,26 @@ class Game(object):
         # initialization
         pygame.init()
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.matrix = Matrix(NUMBER_OF_OF_BLOCKS[1], NUMBER_OF_OF_BLOCKS[0])
+        self.matrix = Matrix(NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
         self.player = Player(0, 0)
         self.moveable_objects = [self.player]
+        self.graphh = MyOwnGraph(self.matrix, NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
         self.initizalize_level()
 
     # making background blocks
     def initizalize_level(self):
+        T = self.graphh.generate_prims_maze()
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
-                if random.randrange(10) > 1:
-                    self.matrix.set_block_to_background(i, j)
-                else:
-                    self.matrix.set_block_to_wall(i, j)
+                self.matrix.set_block_to_background(i, j)
+
+        for edge in T:
+            x1 = edge.node_a.x
+            y1 = edge.node_a.y
+            self.matrix.set_block_to_wall(x1, y1)
+            x2 = edge.node_b.x
+            y2 = edge.node_b.y
+            self.matrix.set_block_to_wall(x2, y2)
 
     # game loop is checking events (from keyboard, window) by calling objects' update()
     # also calls render() and update()
@@ -81,6 +89,6 @@ class Game(object):
 # avoiding display scalling by windows "maku UI larger / smaller"
 ctypes.windll.user32.SetProcessDPIAware()
 
-# staring game
+# staring game:
 actual_game = Game()
 actual_game.game_loop()
