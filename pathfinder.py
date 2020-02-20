@@ -55,12 +55,13 @@ class Game(object):
 
     # placing player in free spot
     def initialize_player(self):
-        for x in range(0, NUMBER_OF_OF_BLOCKS[0]):
-            for y in range(0, NUMBER_OF_OF_BLOCKS[1]):
-                if self.matrix.matrix[x][y]:
-                    self.player = Player(x, y)
-                    self.moveable_objects.append(self.player)
-                    return
+        x = random.randrange(0, NUMBER_OF_OF_BLOCKS[0])
+        y = random.randrange(0, NUMBER_OF_OF_BLOCKS[1])
+        if self.matrix.matrix[x][y]:
+            self.player = Player(x, y)
+            self.moveable_objects.append(self.player)
+        else:
+            return self.initialize_player()
 
     # game loop is checking events (from keyboard, window) by calling objects' update()
     # also calls render() and update()

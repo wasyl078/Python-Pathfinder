@@ -55,7 +55,7 @@ class MyOwnGraph(object):
                 continue
             for neighbour in self.neighbours_of(node):
                 if not visited[neighbour]:
-                    rand_weight = random.randrange(3)
+                    rand_weight = random.randrange(1000)
                     Q.enqueue(Edge(node, neighbour, rand_weight))
 
             while not Q.is_empty() and visited[Q.first().node_b]:
