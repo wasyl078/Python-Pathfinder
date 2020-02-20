@@ -2,6 +2,7 @@
 from blocks.background_block import Background
 from blocks.wall_block import Wall
 
+
 # matrix class - 2-dimensional table -
 # used to check whether position in window is free
 
@@ -21,9 +22,13 @@ class Matrix(object):
         return matrix
 
     def set_block_to_background(self, pos_x, pos_y):
+        if pos_x < 0 or pos_x > self.columns - 1 or pos_y < 0 or pos_y > self.rows - 1:
+            return
         self.matrix[pos_x][pos_y] = Background(pos_x, pos_y)
 
     def set_block_to_wall(self, pos_x, pos_y):
+        if pos_x < 0 or pos_x > self.columns - 1 or pos_y < 0 or pos_y > self.rows - 1:
+            return
         self.matrix[pos_x][pos_y] = Wall(pos_x, pos_y)
 
     def check(self, pos_x, pos_y):

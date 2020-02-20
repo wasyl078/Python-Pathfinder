@@ -8,12 +8,8 @@ class Edge(object):
     # constructor with two nodes and weight
     def __init__(self, node_a, node_b, weight):
 
-        if node_a.__hash__() < node_b.__hash__():
-            self.node_a = node_a
-            self.node_b = node_b
-        else:
-            self.node_a = node_b
-            self.node_b = node_a
+        self.node_a = node_b
+        self.node_b = node_a
         self.weight = weight
 
     def get_node_a(self):

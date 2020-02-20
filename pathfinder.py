@@ -26,25 +26,41 @@ class Game(object):
         pygame.init()
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.matrix = Matrix(NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
-        self.player = Player(0, 0)
-        self.moveable_objects = [self.player]
+        self.player = None
+        self.moveable_objects = []
         self.graphh = MyOwnGraph(self.matrix, NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
-        self.initizalize_level()
+        self.initialize_level()
+        self.initialize_player()
 
     # making background blocks
-    def initizalize_level(self):
+    def initialize_level(self):
         T = self.graphh.generate_prims_maze()
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
-                self.matrix.set_block_to_background(i, j)
+                self.matrix.set_block_to_wall(i, j)
 
         for edge in T:
             x1 = edge.node_a.x
             y1 = edge.node_a.y
-            self.matrix.set_block_to_wall(x1, y1)
+            self.matrix.set_block_to_background(x1, y1)
             x2 = edge.node_b.x
             y2 = edge.node_b.y
-            self.matrix.set_block_to_wall(x2, y2)
+            self.matrix.set_block_to_background(x2, y2)
+        for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
+            self.matrix.set_block_to_background(i, 0)
+            self.matrix.set_block_to_background(i, NUMBER_OF_OF_BLOCKS[1] - 1)
+        for i in range(0, NUMBER_OF_OF_BLOCKS[1]):
+            self.matrix.set_block_to_background(0, i)
+            self.matrix.set_block_to_background(NUMBER_OF_OF_BLOCKS[0] - 1, i)
+
+    # placing player in free spot
+    def initialize_player(self):
+        for x in range(0, NUMBER_OF_OF_BLOCKS[0]):
+            for y in range(0, NUMBER_OF_OF_BLOCKS[1]):
+                if self.matrix.matrix[x][y]:
+                    self.player = Player(x, y)
+                    self.moveable_objects.append(self.player)
+                    return
 
     # game loop is checking events (from keyboard, window) by calling objects' update()
     # also calls render() and update()
