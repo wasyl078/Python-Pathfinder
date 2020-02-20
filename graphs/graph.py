@@ -98,6 +98,11 @@ class MyOwnGraph(object):
             print(edge)
         return T
 
+    def reset_parent_nodes(self):
+        for i in range(0, self.columns):
+            for j in range(0, self.rows):
+                self.nodes[i][j].parent_node = None
+
     def get_lowest_f_cost_from_scores_and_set(self, sett):
         buf = None
         min_cost = sys.maxsize * 2 + 1
@@ -115,9 +120,10 @@ class MyOwnGraph(object):
             node = node.parent_node
 
         for node in path:
-            print(node)
+            #print(node)
             self.matrix.matrix[node.x][node.y].color = Color.PINK
 
+        self.reset_parent_nodes()
         return path
 
     def distance(self, node, goal):
