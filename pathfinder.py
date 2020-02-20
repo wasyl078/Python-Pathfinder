@@ -31,6 +31,7 @@ class Game(object):
         self.graphh = MyOwnGraph(self.matrix, NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
         self.initialize_level()
         self.initialize_player()
+        self.graphh.find_a_star_path(self.player.position_x, self.player.position_y, 0, 0)
 
     # making background blocks
     def initialize_level(self):

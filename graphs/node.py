@@ -11,6 +11,10 @@ class Node(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.parent_node = None
+        self.g_score = 0
+        self.f_score = 0
+        self.h_score = 0
 
     # overriding of just one equals method
     def __eq__(self, other):
