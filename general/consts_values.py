@@ -12,7 +12,7 @@ class Color(object):
     BLACK = (0, 0, 0)
 
 
-# object holding blocks types
+# object holding blocks2 types
 class Blocks(object):
     BACKGROUND = "background"
     PLAYER = "player"

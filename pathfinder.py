@@ -1,7 +1,6 @@
 # imports
 import pygame
 import sys
-from time import sleep
 import random
 import ctypes
 from blocks.player_block import Player
@@ -32,7 +31,7 @@ class Game(object):
         self.initialize_level()
         self.initialize_player()
 
-    # making background blocks
+    # making background blocks2
     def initialize_level(self):
         T = self.graphh.generate_prims_maze()
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
