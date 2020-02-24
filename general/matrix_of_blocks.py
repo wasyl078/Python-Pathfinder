@@ -1,15 +1,18 @@
 # imports
 from blocks.background_block import Background
 from blocks.wall_block import Wall
+from blocks.abstract_block import AbtractBlock
 from general.consts_values import Blocks
+from typing import List
 
 
 # matrix class - 2-dimensional list used to represent level
 class Matrix(object):
     def __init__(self, number_of_columns: int, number_of_rows: int) -> None:
-        self.columns = number_of_columns
-        self.rows = number_of_rows
-        self.two_dim_list = [[None for x in range(self.rows)] for y in range(self.columns)]
+        self.columns: int = number_of_columns
+        self.rows: int = number_of_rows
+        # noinspection PyTypeChecker
+        self.two_dim_list: List[List[AbtractBlock]] = [[None for x in range(self.rows)] for y in range(self.columns)]
 
     # setting particular block in two dimensional list (matrix) into Background
     # noinspection PyTypeChecker

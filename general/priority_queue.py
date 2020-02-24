@@ -1,5 +1,5 @@
 # imports
-from typing import Callable, Any
+from typing import Callable, Any, List
 
 
 # my own implementation of priority queue
@@ -7,9 +7,9 @@ class PriorityQueue(object):
 
     # initialization of queue - by using list
     def __init__(self, order_function: Callable) -> None:
-        self.queue = list()
-        self.actual_size = 0
-        self.order_function = order_function
+        self.queue: List[Any] = list()
+        self.actual_size: int = 0
+        self.order_function: Callable = order_function
 
     # adds object at the end of the queue
     def enqueue(self, new_element: Any) -> None:

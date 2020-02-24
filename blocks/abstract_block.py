@@ -10,17 +10,18 @@ from typing import Tuple
 class AbtractBlock(object):
 
     # constructor - defines every variable that will be used in render() and update()
-    def __init__(self, posx: int, posy: int, color: Tuple[int, int, int], block_type: str) -> None:
-        self.pos_x = posx
-        self.pos_y = posy
-        self.color = color
-        self.block_type = block_type
-        self.row = NUMBER_OF_OF_BLOCKS[1]
-        self.column = NUMBER_OF_OF_BLOCKS[0]
-        self.screen_width = pygame.display.Info().current_w
-        self.screen_height = pygame.display.Info().current_h
-        self.def_width = self.screen_width / self.column
-        self.def_height = self.screen_height / self.row
+    def __init__(self, posx: int, posy: int, color: Tuple[int, int, int] = Color.RED,
+                 block_type: str = Blocks.ABSTRACT) -> None:
+        self.pos_x: int = posx
+        self.pos_y: int = posy
+        self.color: Tuple[int, int, int] = color
+        self.block_type: str = block_type
+        self.row: int = NUMBER_OF_OF_BLOCKS[1]
+        self.column: int = NUMBER_OF_OF_BLOCKS[0]
+        self.screen_width: int = pygame.display.Info().current_w
+        self.screen_height: int = pygame.display.Info().current_h
+        self.def_width: float = self.screen_width / self.column
+        self.def_height: float = self.screen_height / self.row
 
     # this method is supposed to update object's position every clock's tick
     # if necessery - it should be overriden

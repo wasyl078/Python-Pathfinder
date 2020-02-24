@@ -6,8 +6,8 @@ from general.consts_values import Color, Blocks
 
 # background - block in which moveable objects can move into without any problems
 class Background(AbtractBlock):
-    def __init__(self, posx: int, posy: int) -> None:
-        super().__init__(posx, posy, Color.BLACK, Blocks.BACKGROUND)
+    def __init__(self, pos_x: int, pos_y: int) -> None:
+        super().__init__(pos_x, pos_y, Color.BLACK, Blocks.BACKGROUND)
 
     # moveable object can indeed move in background
     @abstractmethod

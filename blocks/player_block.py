@@ -9,8 +9,8 @@ from general.matrix_of_blocks import Matrix
 class Player(AbtractBlock):
 
     # constructor - setting player object
-    def __init__(self, posx: int, posy: int) -> None:
-        super().__init__(posx, posy, Color.GREEN, Blocks.PLAYER)
+    def __init__(self, pos_x: int, pos_y: int) -> None:
+        super().__init__(pos_x, pos_y, Color.GREEN, Blocks.PLAYER)
 
     # player's update is handling keyboard events
     @abstractmethod

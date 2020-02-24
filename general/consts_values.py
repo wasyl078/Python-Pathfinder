@@ -14,6 +14,7 @@ class Color(object):
 
 # object holding blocks2 types
 class Blocks(object):
+    ABSTRACT = "None"
     BACKGROUND = "background"
     PLAYER = "player"
     WALL = "wall"

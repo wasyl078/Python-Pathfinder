@@ -8,12 +8,13 @@ from general.matrix_of_blocks import Matrix
 from graphs.graph import MyOwnGraph
 from blocks.player_block import Player
 
+
 # game class - update and render
 class Game(object):
 
     # constructor - creates objects and stores variables
     # also initializes game frame
-    def __init__(self):
+    def __init__(self) -> None:
         # vars and consts
         self.tps_max = 30.0
         self.game_finished = False
@@ -25,18 +26,20 @@ class Game(object):
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.matrix = Matrix(NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
         self.player = None
-        self.moveable_objects = []
+        self.moveable_objects = list()
         self.graphh = MyOwnGraph(self.matrix, NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
         self.initialize_level()
         self.initialize_player()
 
     # making background blocks2
-    def initialize_level(self):
+    def initialize_level(self) -> None:
         T = self.graphh.generate_prims_maze()
+
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
                 self.matrix.set_block_to_wall(i, j)
 
+        # creating maze
         for edge in T:
             x1 = edge.node_a.x
             y1 = edge.node_a.y
@@ -44,6 +47,8 @@ class Game(object):
             x2 = edge.node_b.x
             y2 = edge.node_b.y
             self.matrix.set_block_to_background(x2, y2)
+
+        # creating Backgroung window borders
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             self.matrix.set_block_to_background(i, 0)
             self.matrix.set_block_to_background(i, NUMBER_OF_OF_BLOCKS[1] - 1)
@@ -52,7 +57,7 @@ class Game(object):
             self.matrix.set_block_to_background(NUMBER_OF_OF_BLOCKS[0] - 1, i)
 
     # placing player in free spot
-    def initialize_player(self):
+    def initialize_player(self) -> None:
         x = random.randrange(0, NUMBER_OF_OF_BLOCKS[0])
         y = random.randrange(0, NUMBER_OF_OF_BLOCKS[1])
         if self.matrix.two_dim_list[x][y]:
@@ -63,7 +68,7 @@ class Game(object):
 
     # game loop is checking events (from keyboard, window) by calling objects' update()
     # also calls render() and update()
-    def game_loop(self):
+    def game_loop(self) -> None:
         while not self.game_finished:
             # events handling
             # exiting game
@@ -85,7 +90,7 @@ class Game(object):
         sys.exit()
 
     # updates positions of every object
-    def update(self):
+    def update(self) -> None:
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
                 self.matrix.two_dim_list[i][j].update(self.matrix)
@@ -93,7 +98,7 @@ class Game(object):
         #     object_to_update.update(self.matrix)
 
     # drawing every object
-    def render(self):
+    def render(self) -> None:
         self.screen.fill(Color.BLACK)
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
@@ -106,6 +111,7 @@ class Game(object):
 # avoiding display scalling by windows "maku UI larger / smaller"
 ctypes.windll.user32.SetProcessDPIAware()
 
-# staring game:
-actual_game = Game()
-actual_game.game_loop()
+# starting game:
+if __name__ == "__main__":
+    actual_game = Game()
+    actual_game.game_loop()
