@@ -1,5 +1,4 @@
 # imports
-from graphs.node import Node
 
 
 # edge - in a graph - contains two nodes and weight
