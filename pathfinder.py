@@ -72,7 +72,7 @@ class Game(object):
                     sys.exit()
                 self.player.update_single_jump(self.matrix, event)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                    self.graphh.find_a_star_path(self.player.position_x, self.player.position_y, 0, 0)
+                    self.graphh.find_a_star_path(self.player.pos_x, self.player.pos_y, 0, 0)
 
             # updates handling
             self.tps_delta += self.tps_clock.tick() / 1000.0
