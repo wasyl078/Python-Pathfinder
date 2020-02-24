@@ -49,16 +49,16 @@ class MyOwnGraph(object):
     def neighbours_of_v2(self, node):
         neighbours = list()
         # up
-        if node.x > 0 and self.matrix.matrix[node.x - 1][node.y].block_type == Blocks.BACKGROUND:
+        if node.x > 0 and self.matrix.two_dim_list[node.x - 1][node.y].block_type == Blocks.BACKGROUND:
             neighbours.append(self.nodes[node.x - 1][node.y])
         # down
-        if node.x < int(self.columns) - 1 and self.matrix.matrix[node.x + 1][node.y].block_type == Blocks.BACKGROUND:
+        if node.x < int(self.columns) - 1 and self.matrix.two_dim_list[node.x + 1][node.y].block_type == Blocks.BACKGROUND:
             neighbours.append(self.nodes[node.x + 1][node.y])
         # left
-        if node.y > 0 and self.matrix.matrix[node.x][node.y - 1].block_type == Blocks.BACKGROUND:
+        if node.y > 0 and self.matrix.two_dim_list[node.x][node.y - 1].block_type == Blocks.BACKGROUND:
             neighbours.append(self.nodes[node.x][node.y - 1])
         # right
-        if node.y < int(self.rows) - 1 and self.matrix.matrix[node.x][node.y + 1].block_type == Blocks.BACKGROUND:
+        if node.y < int(self.rows) - 1 and self.matrix.two_dim_list[node.x][node.y + 1].block_type == Blocks.BACKGROUND:
             neighbours.append(self.nodes[node.x][node.y + 1])
 
         return neighbours
@@ -121,7 +121,7 @@ class MyOwnGraph(object):
 
         for node in path:
             #print(node)
-            self.matrix.matrix[node.x][node.y].color = Color.PINK
+            self.matrix.two_dim_list[node.x][node.y].color = Color.PINK
 
         self.reset_parent_nodes()
         return path

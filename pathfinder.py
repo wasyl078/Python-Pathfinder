@@ -3,11 +3,10 @@ import pygame
 import sys
 import random
 import ctypes
-from blocks.player_block import Player
-from general.matrix_of_blocks import Matrix
 from general.consts_values import NUMBER_OF_OF_BLOCKS, Color
+from general.matrix_of_blocks import Matrix
 from graphs.graph import MyOwnGraph
-
+from blocks.player_block import Player
 
 # game class - update and render
 class Game(object):
@@ -56,7 +55,7 @@ class Game(object):
     def initialize_player(self):
         x = random.randrange(0, NUMBER_OF_OF_BLOCKS[0])
         y = random.randrange(0, NUMBER_OF_OF_BLOCKS[1])
-        if self.matrix.matrix[x][y]:
+        if self.matrix.two_dim_list[x][y]:
             self.player = Player(x, y)
             self.moveable_objects.append(self.player)
         else:
@@ -89,7 +88,7 @@ class Game(object):
     def update(self):
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
-                self.matrix.matrix[i][j].update(self.matrix)
+                self.matrix.two_dim_list[i][j].update(self.matrix)
         # for object_to_update in self.moveable_objects:
         #     object_to_update.update(self.matrix)
 
@@ -98,7 +97,7 @@ class Game(object):
         self.screen.fill(Color.BLACK)
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
-                self.matrix.matrix[i][j].render(self.screen)
+                self.matrix.two_dim_list[i][j].render(self.screen)
         for object_to_render in self.moveable_objects:
             object_to_render.render(self.screen)
         pygame.display.flip()

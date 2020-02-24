@@ -6,10 +6,10 @@ from general.consts_values import Color, Blocks
 
 # background - block in which moveable objects can move into without any problems
 class Background(AbtractBlock):
-    def __init__(self, posx, posy):
+    def __init__(self, posx: int, posy: int) -> None:
         super().__init__(posx, posy, Color.BLACK, Blocks.BACKGROUND)
 
     # moveable object can indeed move in background
     @abstractmethod
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return True
