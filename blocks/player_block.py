@@ -4,8 +4,9 @@ from blocks.abstract_block import AbtractBlock, abstractmethod
 from general.consts_values import Blocks, Color
 
 
-# player is standard player character
+# player is an actual object that user control
 class Player(AbtractBlock):
+
     # constructor - setting player object
     def __init__(self, posx, posy):
         super().__init__(posx, posy, Color.GREEN, Blocks.PLAYER)
@@ -39,10 +40,7 @@ class Player(AbtractBlock):
             if matrix.check(self.position_x, self.position_y - 1):
                 self.position_y -= 1
 
-    @abstractmethod
-    def render(self, screen):
-        super().render(screen)
-
+    # cannot move into player block
     @abstractmethod
     def __bool__(self):
         return False

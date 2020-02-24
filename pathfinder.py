@@ -91,7 +91,7 @@ class Game(object):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
                 self.matrix.matrix[i][j].update(self.matrix)
         # for object_to_update in self.moveable_objects:
-        #    object_to_update.update(self.matrix)
+        #     object_to_update.update(self.matrix)
 
     # drawing every object
     def render(self):
