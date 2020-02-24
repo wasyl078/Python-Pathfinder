@@ -65,7 +65,7 @@ class MyOwnGraph(object):
 
     # making maze with Prim's algorithm
     def generate_prims_maze(self):
-        Q = PriorityQueue(self.columns * self.rows, predicate)
+        Q = PriorityQueue(predicate)
         visited = {}
         T = list()
         for x in range(0, int(self.columns / 2) + 1):

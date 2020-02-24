@@ -3,10 +3,7 @@ from blocks.background_block import Background
 from blocks.wall_block import Wall
 
 
-# matrix class - 2-dimensional table -
-# used to check whether position in window is free
-
-
+# matrix class - 2-dimensional list used to check whether position in window is free
 class Matrix(object):
     def __init__(self, number_of_columns, number_of_rows):
         self.columns = number_of_columns

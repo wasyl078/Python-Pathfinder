@@ -1,8 +1,8 @@
-# this file only holds const values and objects used in this project
+# this file only holds const values and class used in this project
 NUMBER_OF_OF_BLOCKS = (64, 36)
 
 
-# object holding colours
+# class holding colours
 class Color(object):
     RED = (255, 0, 0)
     GREEN = (0, 255, 0)
@@ -17,3 +17,6 @@ class Blocks(object):
     BACKGROUND = "background"
     PLAYER = "player"
     WALL = "wall"
+    ENEMY = "enemy"
+    PATH = "path"
+    BOMB = "bomb"
