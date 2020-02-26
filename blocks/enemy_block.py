@@ -1,6 +1,7 @@
 # imports
 from blocks.abstract_block import AbtractBlock, abstractmethod
 from general.consts_values import Blocks, Color
+from general.matrix_of_blocks import Matrix
 from blocks.player_block import Player
 from typing import List
 from graphs.graph import MyOwnGraph
@@ -18,21 +19,19 @@ class Enemy(AbtractBlock):
 
     # updates position - it depends on player's position
     @abstractmethod
-    def update(self, matrix, moveable_objects: List[AbtractBlock]):
+    def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
         for objectt in moveable_objects:
             if objectt.block_type == Blocks.PLAYER:
                 self.player = objectt
                 break
 
         if self.timer < 0:
-            T = self.graph.find_a_star_path(self.pos_x, self.pos_y, self.player.pos_x, self.player.pos_y)
-            if self.check_place(T[-1].x, T[-1].y, matrix, moveable_objects):
-                self.pos_x = T[-1].x
-                self.pos_y = T[-1].y
-
-            self.timer = 10
-        else:
-            self.timer -= 1
+            path = self.graph.find_a_star_path(self.pos_x, self.pos_y, self.player.pos_x, self.player.pos_y)
+            if self.check_place(path[-1].x, path[-1].y, matrix, moveable_objects):
+                self.pos_x = path[-1].x
+                self.pos_y = path[-1].y
+            self.timer = 5
+        self.timer -= 1
 
     # cannot move into enemy:
     def __bool__(self):
