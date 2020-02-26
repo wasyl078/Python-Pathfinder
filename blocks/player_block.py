@@ -3,6 +3,7 @@ import pygame
 from blocks.abstract_block import AbtractBlock, abstractmethod
 from general.consts_values import Blocks, Color
 from general.matrix_of_blocks import Matrix
+from typing import List
 
 
 # player is an actual object that user control
@@ -14,7 +15,8 @@ class Player(AbtractBlock):
 
     # player's update is handling keyboard events
     @abstractmethod
-    def update(self, matrix: Matrix) -> None:
+    def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
+        return
         keys = pygame.key.get_pressed()
         # input
         if keys[pygame.K_RIGHT] and matrix.check(self.pos_x + 1, self.pos_y):
@@ -27,21 +29,21 @@ class Player(AbtractBlock):
             self.pos_y -= 1
 
     # another way to handle keyboard events by Player
-    def update_single_jump(self, matrix: Matrix, event: pygame.event) -> None:
+    def update_single_jump(self, matrix: Matrix, moveable_objects: List[AbtractBlock], event: pygame.event) -> None:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-            if matrix.check(self.pos_x + 1, self.pos_y):
+            if self.check_place(self.pos_x + 1, self.pos_y, matrix, moveable_objects):
                 self.pos_x += 1
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-            if matrix.check(self.pos_x - 1, self.pos_y):
+            if self.check_place(self.pos_x - 1, self.pos_y, matrix, moveable_objects):
                 self.pos_x -= 1
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
-            if matrix.check(self.pos_x, self.pos_y + 1):
+            if self.check_place(self.pos_x, self.pos_y + 1, matrix, moveable_objects):
                 self.pos_y += 1
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-            if matrix.check(self.pos_x, self.pos_y - 1):
+            if self.check_place(self.pos_x, self.pos_y - 1, matrix, moveable_objects):
                 self.pos_y -= 1
 
     # cannot move into player block
     @abstractmethod
-    def __bool__(self) -> None:
+    def __bool__(self) -> bool:
         return False

@@ -7,6 +7,7 @@ from general.consts_values import NUMBER_OF_OF_BLOCKS, Color
 from general.matrix_of_blocks import Matrix
 from graphs.graph import MyOwnGraph
 from blocks.player_block import Player
+from blocks.enemy_block import Enemy
 
 
 # game class - update and render
@@ -26,10 +27,12 @@ class Game(object):
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.matrix = Matrix(NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
         self.player = None
+        self.enemy = None
         self.moveable_objects = list()
         self.graphh = MyOwnGraph(self.matrix, NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
         self.initialize_level()
         self.initialize_player()
+        self.initialize_enemy()
 
     # making background blocks2
     def initialize_level(self) -> None:
@@ -66,6 +69,16 @@ class Game(object):
         else:
             return self.initialize_player()
 
+    # placing enemy in free spot
+    def initialize_enemy(self) -> None:
+        x = random.randrange(0, NUMBER_OF_OF_BLOCKS[0])
+        y = random.randrange(0, NUMBER_OF_OF_BLOCKS[1])
+        if self.matrix.two_dim_list[x][y]:
+            self.enemy = Enemy(x, y, self.graphh)
+            self.moveable_objects.append(self.enemy)
+        else:
+            return self.initialize_enemy()
+
     # game loop is checking events (from keyboard, window) by calling objects' update()
     # also calls render() and update()
     def game_loop(self) -> None:
@@ -75,7 +88,7 @@ class Game(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     sys.exit()
-                self.player.update_single_jump(self.matrix, event)
+                self.player.update_single_jump(self.matrix, self.moveable_objects, event)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     self.graphh.find_a_star_path(self.player.pos_x, self.player.pos_y, 0, 0)
 
@@ -93,9 +106,9 @@ class Game(object):
     def update(self) -> None:
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
-                self.matrix.two_dim_list[i][j].update(self.matrix)
-        # for object_to_update in self.moveable_objects:
-        #     object_to_update.update(self.matrix)
+                self.matrix.two_dim_list[i][j].update(self.matrix, self.moveable_objects)
+        for object_to_update in self.moveable_objects:
+            object_to_update.update(self.matrix, self.moveable_objects)
 
     # drawing every object
     def render(self) -> None:

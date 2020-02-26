@@ -10,6 +10,7 @@ class Color(object):
     PINK = (255, 0, 255)
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
+    ORANGE = (255, 165, 0)
 
 
 # object holding blocks2 types

@@ -154,8 +154,8 @@ class MyOwnGraph(object):
             path.append(node)
             node = node.parent_node
         # colouring path
-        for node in path:
-            self.two_dim_list[node.x][node.y].color = Color.PINK
+        # for node in path:
+        #     self.two_dim_list[node.x][node.y].color = Color.PINK
 
         self.reset_parent_nodes()
         return path
