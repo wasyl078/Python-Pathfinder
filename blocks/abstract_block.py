@@ -22,6 +22,7 @@ class AbtractBlock(object):
         self.screen_height: int = pygame.display.Info().current_h
         self.def_width: float = self.screen_width / self.columns
         self.def_height: float = self.screen_height / self.rows
+        self.HP = 100
 
     # this method is supposed to update object's position every clock's tick
     # if necessery - it should be overriden
@@ -44,7 +45,7 @@ class AbtractBlock(object):
         if posx < 0 or posx > self.columns - 1 or posy < 0 or posy > self.rows - 1:
             return False
 
-        # checking oder blocks
+        # checking other blocks
         if matrix.two_dim_list[posx][posy]:
             for block in moveable_objects:
                 if block.pos_x == posx and block.pos_y == posy and self != block:

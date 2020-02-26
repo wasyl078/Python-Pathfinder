@@ -14,12 +14,19 @@ class Enemy(AbtractBlock):
     def __init__(self, pos_x: int, pos_y: int, graph: MyOwnGraph) -> None:
         super().__init__(pos_x, pos_y, Color.RED, Blocks.ENEMY)
         self.graph = graph
+        # noinspection PyTypeChecker
         self.player: Player = None
         self.timer = 60
 
     # updates position - it depends on player's position
     @abstractmethod
     def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
+        # checks HP
+        if self.HP <= 0:
+            moveable_objects.remove(self)
+            return
+
+        # if HP is positive, then move towards player
         for objectt in moveable_objects:
             if objectt.block_type == Blocks.PLAYER:
                 self.player = objectt

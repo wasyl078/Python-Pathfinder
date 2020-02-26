@@ -4,6 +4,7 @@ from blocks.abstract_block import AbtractBlock, abstractmethod
 from general.consts_values import Blocks, Color
 from general.matrix_of_blocks import Matrix
 from typing import List
+from blocks.bomb_block import Bomb
 
 
 # player is an actual object that user control
@@ -13,20 +14,23 @@ class Player(AbtractBlock):
     def __init__(self, pos_x: int, pos_y: int) -> None:
         super().__init__(pos_x, pos_y, Color.GREEN, Blocks.PLAYER)
 
+    # places bomb, which causes damage to near blocks
+    def place_bomb(self, moveable_objects: List[AbtractBlock]):
+        moveable_objects.append(Bomb(self.pos_x, self.pos_y, 1))
+
     # player's update is handling keyboard events
     @abstractmethod
     def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
-        return
-        keys = pygame.key.get_pressed()
+        # checks HP
+        if self.HP <= 0:
+            moveable_objects.remove(self)
+            return
+
         # input
-        if keys[pygame.K_RIGHT] and matrix.check(self.pos_x + 1, self.pos_y):
-            self.pos_x += 1
-        if keys[pygame.K_LEFT] and matrix.check(self.pos_x - 1, self.pos_y):
-            self.pos_x -= 1
-        if keys[pygame.K_DOWN] and matrix.check(self.pos_x, self.pos_y + 1):
-            self.pos_y += 1
-        if keys[pygame.K_UP] and matrix.check(self.pos_x, self.pos_y - 1):
-            self.pos_y -= 1
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            self.place_bomb(moveable_objects)
+        return
 
     # another way to handle keyboard events by Player
     def update_single_jump(self, matrix: Matrix, moveable_objects: List[AbtractBlock], event: pygame.event) -> None:
@@ -47,3 +51,12 @@ class Player(AbtractBlock):
     @abstractmethod
     def __bool__(self) -> bool:
         return False
+
+# if keys[pygame.K_RIGHT] and matrix.check(self.pos_x + 1, self.pos_y):
+#            self.pos_x += 1
+#        if keys[pygame.K_LEFT] and matrix.check(self.pos_x - 1, self.pos_y):
+#            self.pos_x -= 1
+#        if keys[pygame.K_DOWN] and matrix.check(self.pos_x, self.pos_y + 1):
+#            self.pos_y += 1
+#       if keys[pygame.K_UP] and matrix.check(self.pos_x, self.pos_y - 1):
+#            self.pos_y -= 1
