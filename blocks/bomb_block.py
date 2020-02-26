@@ -7,7 +7,7 @@ from typing import List
 
 # bomb is an block / object which destroys maze walls and deals damage to moveable objects
 class Bomb(AbtractBlock):
-    def __init__(self, pos_x: int, pos_y: int):
+    def __init__(self, pos_x: int, pos_y: int) -> None:
         super().__init__(pos_x, pos_y, Color.ORANGE, Blocks.PLAYER)
 
     # cannot
@@ -17,5 +17,5 @@ class Bomb(AbtractBlock):
 
     # cannot move into bomb block
     @abstractmethod
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return False
