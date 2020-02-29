@@ -11,7 +11,7 @@ class AbtractBlock(object):
 
     # constructor - defines every variable that will be used in render() and update()
     def __init__(self, posx: int, posy: int, color: Tuple[int, int, int] = Color.RED,
-                 block_type: str = Blocks.ABSTRACT) -> None:
+                 block_type: str = Blocks.ABSTRACT, damageable: bool = False) -> None:
         self.pos_x: int = posx
         self.pos_y: int = posy
         self.color: Tuple[int, int, int] = color
@@ -22,7 +22,7 @@ class AbtractBlock(object):
         self.screen_height: int = pygame.display.Info().current_h
         self.def_width: float = self.screen_width / self.columns
         self.def_height: float = self.screen_height / self.rows
-        self.HP = 100
+        self.damageable = damageable
 
     # this method is supposed to update object's position every clock's tick
     # if necessery - it should be overriden
@@ -48,7 +48,7 @@ class AbtractBlock(object):
         # checking other blocks
         if matrix.two_dim_list[posx][posy]:
             for block in moveable_objects:
-                if block.pos_x == posx and block.pos_y == posy and self != block:
+                if block.pos_x == posx and block.pos_y == posy and self != block and not block:
                     return False
             return True
         return False

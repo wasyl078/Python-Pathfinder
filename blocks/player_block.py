@@ -12,20 +12,15 @@ class Player(AbtractBlock):
 
     # constructor - setting player object
     def __init__(self, pos_x: int, pos_y: int) -> None:
-        super().__init__(pos_x, pos_y, Color.GREEN, Blocks.PLAYER)
+        super().__init__(pos_x, pos_y, Color.GREEN, Blocks.PLAYER, True)
 
     # places bomb, which causes damage to near blocks
     def place_bomb(self, moveable_objects: List[AbtractBlock]):
-        moveable_objects.append(Bomb(self.pos_x, self.pos_y, 1))
+        moveable_objects.append(Bomb(self.pos_x, self.pos_y, 3))
 
     # player's update is handling keyboard events
     @abstractmethod
     def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
-        # checks HP
-        if self.HP <= 0:
-            moveable_objects.remove(self)
-            return
-
         # input
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
