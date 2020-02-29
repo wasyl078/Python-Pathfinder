@@ -32,7 +32,12 @@ class Explosion(AbtractBlock):
     def damage_to_objects(self, moveable_objects: List[AbtractBlock]):
         for objectt in moveable_objects:
             if objectt.pos_x == self.pos_x and objectt.pos_y == self.pos_y and objectt.damageable:
-                moveable_objects.remove(objectt)
+                # destroy players and enemys
+                if objectt.block_type == Blocks.ENEMY or objectt.block_type == Blocks.PLAYER:
+                    moveable_objects.remove(objectt)
+                # if another bomb -> detonate it
+                if objectt.block_type == Blocks.BOMB:
+                    objectt.timer = 0
 
     # can move into explosions = gets damage
     @abstractmethod
