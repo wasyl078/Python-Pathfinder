@@ -89,6 +89,10 @@ class Game(object):
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     sys.exit()
                 self.player.update_single_jump(self.matrix, self.moveable_objects, event)
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                    # noinspection PyShadowingNames
+                    actual_game = Game()
+                    actual_game.game_loop()     # press R to restart game
 
             # updates handling
             self.tps_delta += self.tps_clock.tick() / 1000.0

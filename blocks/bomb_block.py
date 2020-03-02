@@ -23,7 +23,6 @@ class Bomb(AbtractBlock):
 
     # deals damage to near blocks / objects
     def deal_damage_in_cross(self, mod_x: int, mod_y: int, matrix: Matrix, moveable_objects: List[AbtractBlock]):
-        print("boom")
         x = self.pos_x
         y = self.pos_y
         if mod_x > 0 or mod_y > 0:

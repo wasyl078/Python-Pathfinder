@@ -16,7 +16,7 @@ class Enemy(AbtractBlock):
         self.graph = graph
         # noinspection PyTypeChecker
         self.player: Player = None
-        self.timer = 60
+        self.timer = 30
 
     # updates position - it depends on player's position
     @abstractmethod
