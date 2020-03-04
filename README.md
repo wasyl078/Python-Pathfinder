@@ -8,7 +8,7 @@ Use keyboard keys to move :arrow_up::arrow_down::arrow_left::arrow_right:
 Use key "Z" to place bombs
 If you die, or you destroy your enemy, you can restart game by pressing key "R"
 ## Ingame screenshots
-![ingame_gameplay_creen](https://github.com/wasyl078/Python-Pathfinder/blob/master/Screenshots/explosion screen.png)
+![ingame_gameplay_creen](https://github.com/wasyl078/Python-Pathfinder/blob/master/Screenshots/explosion_screen.png)
 ### Credits:
 Thanks to my friends for supporting me in my IT adventure: 
  [@Ukasz](https://github.com/Ukasz09), [@PanPawelRaper](https://github.com/PRZYPRAWA), [@Loszka](https://github.com/M1loseph)
