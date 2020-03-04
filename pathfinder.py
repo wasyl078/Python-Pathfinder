@@ -123,7 +123,7 @@ class Game(object):
         pygame.display.flip()
 
 
-# avoiding display scalling by windows "maku UI larger or smaller"
+# avoiding display scalling by windows "maku UI larger / smaller"
 ctypes.windll.user32.SetProcessDPIAware()
 
 # starting game:
