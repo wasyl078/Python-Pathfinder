@@ -1,4 +1,4 @@
-# :heart: Python-Pathfinder ![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102) ![My badge u d](https://img.shields.io/badge/status-under development-blue)
+# :heart: Python-Pathfinder ![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102) ![my badge](https://img.shields.io/badge/status-under_development-blue)
 My goal for this project was to implement sophisticated graph's and tree's algorithms. As you can see, this is not a big project, I would rather call **Pathfidinder** a fun example of use of these algorithms. This program is using mechanics of very popular type of games: Bomberman. You just move your square in the maze, place bombs and try not to be cought by enemy evil squere, who alweays know where you are
 
 ## Technologies and algorithms 
