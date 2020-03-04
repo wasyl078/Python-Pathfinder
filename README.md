@@ -3,6 +3,8 @@ My goal for this project was to implement sophisticated graph's and tree's algor
 
 ## Technologies and algorithms 
 I programmed it in Python 3.7 and 3.8 versions :snake:with Pygame library, but don't worry, if you want to play my **Pathfinder**, but you don't have python on your machine, I have prepared .exe for you :heart:
+A* pathfinding algorithm allows enemy block to trace player block
+Prim's Minimal Spanding Tree algorithm is used to generate random maze in which you can move
 ## How to play
 Use keyboard keys to move :arrow_up::arrow_down::arrow_left::arrow_right:
 Use key "Z" to place bombs
