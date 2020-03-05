@@ -22,26 +22,43 @@ class Bomb(AbtractBlock):
         self.height = self.def_height
 
     # deals damage to near blocks / objects
-    def deal_damage_in_cross(self, mod_x: int, mod_y: int, matrix: Matrix, moveable_objects: List[AbtractBlock]):
+    def deal_damage_in_cross(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
+        moveable_objects.append(Explosion(self.pos_x, self.pos_y))
+        self.deal_damage_to("up", matrix, moveable_objects)
+        self.deal_damage_to("down", matrix, moveable_objects)
+        self.deal_damage_to("left", matrix, moveable_objects)
+        self.deal_damage_to("right", matrix, moveable_objects)
+
+    # deals damage to particular direction -> till counters wall block
+    def deal_damage_to(self, direction: str, matrix: Matrix, moveable_objects: List[AbtractBlock]):
         x = self.pos_x
         y = self.pos_y
-        if mod_x > 0 or mod_y > 0:
-            new_explosion_right = Explosion(x + mod_x, y)
-            new_explosion_left = Explosion(x - mod_x, y)
-            new_explosion_down = Explosion(x, y + mod_y)
-            new_explosion_up = Explosion(x, y - mod_y)
-            moveable_objects.append(new_explosion_right)
-            moveable_objects.append(new_explosion_left)
-            moveable_objects.append(new_explosion_down)
-            moveable_objects.append(new_explosion_up)
-            return self.deal_damage_in_cross(max(mod_x - 1, 0), max(mod_y - 1, 0), matrix, moveable_objects)
+        if direction == "up":
+            for i in range(0, self.explo_range):
+                moveable_objects.append(Explosion(x, y - i - 1))
+                if matrix.checks_blocks_type(x, y - i - 1) == Blocks.WALL:
+                    break
+        elif direction == "down":
+            for i in range(0, self.explo_range):
+                moveable_objects.append(Explosion(x, y + i + 1))
+                if matrix.checks_blocks_type(x, y + i + 1) == Blocks.WALL:
+                    break
+        elif direction == "left":
+            for i in range(0, self.explo_range):
+                moveable_objects.append(Explosion(x - i - 1, y))
+                if matrix.checks_blocks_type(x - i - 1, y) == Blocks.WALL:
+                    break
+        elif direction == "right":
+            for i in range(0, self.explo_range):
+                moveable_objects.append(Explosion(x + i + 1, y))
+                if matrix.checks_blocks_type(x + i + 1, y) == Blocks.WALL:
+                    break
 
     # bombs tick - after 100 ticks (1 2/3 sec.) bomb explodes
     @abstractmethod
     def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
         if self.timer <= 0:
-            moveable_objects.append(Explosion(self.pos_x, self.pos_y))
-            self.deal_damage_in_cross(self.explo_range, self.explo_range, matrix, moveable_objects)
+            self.deal_damage_in_cross(matrix, moveable_objects)
             if self in moveable_objects:
                 moveable_objects.remove(self)
         self.timer -= 1

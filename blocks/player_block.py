@@ -13,6 +13,7 @@ class Player(AbtractBlock):
     # constructor - setting player object
     def __init__(self, pos_x: int, pos_y: int) -> None:
         super().__init__(pos_x, pos_y, Color.GREEN, Blocks.PLAYER, True)
+        self.bombs_power = 6
 
     # another way to handle keyboard events by Player
     def update_single_jump(self, matrix: Matrix, moveable_objects: List[AbtractBlock], event: pygame.event) -> None:
@@ -32,7 +33,15 @@ class Player(AbtractBlock):
             if self.check_place(self.pos_x, self.pos_y - 1, matrix, moveable_objects):
                 self.pos_y -= 1
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            moveable_objects.append(Bomb(self.pos_x, self.pos_y, 3))
+            self.place_bomb(moveable_objects)
+
+    # places bomb (if it is possible)
+    def place_bomb(self, moveable_objects: List[AbtractBlock]) -> None:
+        for potential_bomb in moveable_objects:
+            if potential_bomb.block_type == Blocks.BOMB \
+                    and potential_bomb.pos_x == self.pos_x and potential_bomb.pos_y == self.pos_y:
+                return
+        moveable_objects.append(Bomb(self.pos_x, self.pos_y, self.bombs_power))
 
     # cannot move into player block
     @abstractmethod

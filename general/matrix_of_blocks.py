@@ -46,3 +46,9 @@ class Matrix(object):
             return False
         else:
             return bool(self.two_dim_list[pos_x][pos_y])
+
+    # checks blocks type (if block is available)
+    def checks_blocks_type(self, pos_x: int, pos_y: int) -> str:
+        if pos_x < 0 or pos_x >= self.columns or pos_y < 0 or pos_y >= self.rows:
+            return "none"
+        return self.two_dim_list[pos_x][pos_y].block_type
