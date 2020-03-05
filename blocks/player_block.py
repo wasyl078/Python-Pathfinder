@@ -13,7 +13,7 @@ class Player(AbtractBlock):
     # constructor - setting player object
     def __init__(self, pos_x: int, pos_y: int) -> None:
         super().__init__(pos_x, pos_y, Color.GREEN, Blocks.PLAYER, True)
-        self.bombs_power = 6
+        self.bombs_power = 2
 
     # another way to handle keyboard events by Player
     def update_single_jump(self, matrix: Matrix, moveable_objects: List[AbtractBlock], event: pygame.event) -> None:
