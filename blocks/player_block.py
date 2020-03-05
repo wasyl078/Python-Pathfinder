@@ -14,21 +14,11 @@ class Player(AbtractBlock):
     def __init__(self, pos_x: int, pos_y: int) -> None:
         super().__init__(pos_x, pos_y, Color.GREEN, Blocks.PLAYER, True)
 
-    # places bomb, which causes damage to near blocks
-    def place_bomb(self, moveable_objects: List[AbtractBlock]):
-        moveable_objects.append(Bomb(self.pos_x, self.pos_y, 3))
-
-    # player's update is handling keyboard events
-    @abstractmethod
-    def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
-        # input
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
-            self.place_bomb(moveable_objects)
-        return
-
     # another way to handle keyboard events by Player
     def update_single_jump(self, matrix: Matrix, moveable_objects: List[AbtractBlock], event: pygame.event) -> None:
+        if self not in moveable_objects:
+            return
+        # player actions are only available for alive player
         if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
             if self.check_place(self.pos_x + 1, self.pos_y, matrix, moveable_objects):
                 self.pos_x += 1
@@ -41,6 +31,8 @@ class Player(AbtractBlock):
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
             if self.check_place(self.pos_x, self.pos_y - 1, matrix, moveable_objects):
                 self.pos_y -= 1
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            moveable_objects.append(Bomb(self.pos_x, self.pos_y, 3))
 
     # cannot move into player block
     @abstractmethod
