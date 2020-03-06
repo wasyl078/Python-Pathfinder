@@ -14,7 +14,7 @@ class Game(object):
 
     # constructor - creates objects and stores variables
     # also initializes game frame
-    def __init__(self) -> None:
+    def __init__(self, players_color_or_png) -> None:
         # vars and consts
         self.tps_max = 30.0
         self.game_finished = False
@@ -30,7 +30,7 @@ class Game(object):
         self.moveable_objects = list()
         self.graphh = MyOwnGraph(self.matrix, NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
         self.initialize_level()
-        self.initialize_player()
+        self.initialize_player(players_color_or_png)
         self.initialize_enemy()
 
     # making background blocks2
@@ -59,14 +59,14 @@ class Game(object):
             self.matrix.set_block_to_background(NUMBER_OF_OF_BLOCKS[0] - 1, i)
 
     # placing player in free spot
-    def initialize_player(self) -> None:
+    def initialize_player(self, players_color_or_png) -> None:
         x = random.randrange(0, NUMBER_OF_OF_BLOCKS[0])
         y = random.randrange(0, NUMBER_OF_OF_BLOCKS[1])
         if self.matrix.two_dim_list[x][y]:
-            self.player = Player(x, y)
+            self.player = Player(x, y, players_color_or_png)
             self.moveable_objects.append(self.player)
         else:
-            return self.initialize_player()
+            return self.initialize_player(players_color_or_png)
 
     # placing enemy in free spot
     def initialize_enemy(self) -> None:
