@@ -18,8 +18,8 @@ class Bomb(AbtractBlock):
         self.timer = self.def_timer
         self.extra_height = 0
         self.extra_width = 0
-        self.width = self.def_width
-        self.height = self.def_height
+        self.width = 0
+        self.height = 0
 
     # deals damage to near blocks / objects
     def deal_damage_in_cross(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):

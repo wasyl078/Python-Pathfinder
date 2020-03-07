@@ -80,7 +80,7 @@ class Game(object):
 
     # game loop is checking events (from keyboard, window) by calling objects' update()
     # also calls render() and update()
-    def game_loop(self, actual_game) -> None:
+    def game_loop(self, actual_game, players_color_or_png) -> None:
         while not self.game_finished:
             # events handling
             # exiting game
@@ -90,8 +90,8 @@ class Game(object):
                 self.player.update_single_jump(self.matrix, self.moveable_objects, event)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                     # noinspection PyShadowingNames
-                    actual_game = Game()
-                    actual_game.game_loop(actual_game)     # press R to restart game
+                    actual_game = Game(players_color_or_png)
+                    actual_game.game_loop(actual_game, players_color_or_png)     # press R to restart game
 
             # updates handling
             self.tps_delta += self.tps_clock.tick() / 1000.0

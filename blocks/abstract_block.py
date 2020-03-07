@@ -53,6 +53,18 @@ class AbtractBlock(object):
             return True
         return False
 
+    # overwriting hash method - only pos_x, pos_y and block_type matters:
+    def __hash__(self):
+        return hash((self.pos_x, self.pos_y, self.block_type))
+
+    # overwriting eq method - only pos_x, pos_y and block_type are being checked:
+    def __eq__(self, other):
+        return self.pos_x == other.pos_x and self.pos_y == other.pos_y and self.block_type == other.block_type
+
+    # overwriting str method - easier to "debug"
+    def __str__(self):
+        return "{}x{} ({})".format(self.pos_x, self.pos_y, self.block_type)
+
     # overriding __bool_(self) -> True - you can move there, False -> you can't move there
     @abstractmethod
     def __bool__(self) -> bool:

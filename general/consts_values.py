@@ -8,7 +8,6 @@ NUMBER_OF_OF_BLOCKS = (64, 36)
 # class holding colours
 class Color(object):
     RED = (255, 0, 0)
-    DARK_ORANGE = (255, 64, 0)
     ORANGE = (255, 128, 0)
     YELLOW = (255, 255, 0)
     MEGA_LIGHT_GREEN = (191, 255, 0)
@@ -23,11 +22,11 @@ class Color(object):
     LUKASZ_IMG = pygame.image.load("pictures/lukasz lewo.png")
     PIZZA_IMG = pygame.image.load("pictures/pizza.png")
     UFO_IMG = pygame.image.load("pictures/ufo.png")
-    ANDROID_PNG = pygame.image.load("pictures/android.png")
     PAWEL_PNG = pygame.image.load("pictures/pawel.png")
+    PAWEL2_PNG = pygame.image.load("pictures/pawel2.png")
     OGOREK_PNG = pygame.image.load("pictures/ogorek.png")
-    playable_colors_list = [DARK_ORANGE, ORANGE, YELLOW, MEGA_LIGHT_GREEN, GREEN, CYAN, LIGHT_BLUE, BLUE, PURPLE, PINK,
-                            LUKASZ_IMG, PIZZA_IMG, UFO_IMG, ANDROID_PNG, PAWEL_PNG, OGOREK_PNG]
+    playable_colors_list = [MEGA_LIGHT_GREEN, BLUE, PINK, LUKASZ_IMG, PIZZA_IMG, UFO_IMG, PAWEL2_PNG, PAWEL_PNG,
+                            OGOREK_PNG]
 
 
 # object holding blocks2 types

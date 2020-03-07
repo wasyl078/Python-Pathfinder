@@ -25,3 +25,9 @@ J
 boards/game_setup_board.py,a\d\adaf29515167f3929319cb7bf597c02ab83e8e26
 D
 boards/game_board.py,d\4\d44e264fe9b18fb8250334761ed43a8052929e38
+D
+blocks/wall_block.py,1\5\15a8eb4889e5bcebf8434837902dd2f2185a0ab1
+I
+blocks/explosion_block.py,0\4\048506a9b5139754af7e1d39c4862ab2a0175eb6
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
