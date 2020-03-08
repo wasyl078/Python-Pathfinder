@@ -17,12 +17,13 @@ class Enemy(AbtractBlock):
 
     # constructor - setting enemy object; receives graph
     def __init__(self, pos_x: int, pos_y: int, graph: MyOwnGraph) -> None:
-        super().__init__(pos_x, pos_y, Color.BLUE, Blocks.ENEMY, True)
+        super().__init__(pos_x, pos_y, Color.PAWEL_PNG, Blocks.ENEMY, True)
         self.graph = graph
         self.last_visited_places = LimitedUniqueStack(20)
         self.bombs_power = 3
         self.def_time_between_moves = 10
         self.timer_to_move = self.def_time_between_moves
+        self.escape_timer = 0
 
     # updates position - it depends on player's position
     @abstractmethod
@@ -33,17 +34,21 @@ class Enemy(AbtractBlock):
     # noinspection PyTypeChecker
     def update_better_ai(self, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
         self.timer_to_move -= 1
+        self.escape_timer -= 1
         if self.timer_to_move <= 0:
             decision, some_block = self.choose_decison(moveable_objects)
-            if decision == 0:
+            if self.escape_timer > 0:
+                self.dec_escape(matrix, moveable_objects)
+            elif decision == 0:
                 self.dec_move_to_player(some_block, matrix, moveable_objects)
                 self.last_visited_places.push(matrix.two_dim_list[self.pos_x][self.pos_y])
             elif decision == 1:
                 self.dec_place_bomb(some_block, matrix, moveable_objects)
+                self.last_visited_places.push(matrix.two_dim_list[self.pos_x][self.pos_y])
             elif decision == -1:
                 self.dec_escape(matrix, moveable_objects)
+                self.escape_timer = 60
             self.timer_to_move = self.def_time_between_moves
-            self.last_visited_places.print_stack()
 
 # finds player to follow (the one, whick is closest to enemy)
     def find_closest_player(self, moveable_objects: List[AbtractBlock]) -> AbtractBlock:
@@ -80,7 +85,7 @@ class Enemy(AbtractBlock):
         return 0, player
 
     # decision: move towards player - there is no threat
-    def dec_move_to_player(self, player: Player, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
+    def dec_move_to_player(self, player: AbtractBlock, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
         print("move")
         path = self.graph.find_a_star_path(self.pos_x, self.pos_y, player.pos_x, player.pos_y)
         if self.check_place(path[-1].x, path[-1].y, matrix, moveable_objects):

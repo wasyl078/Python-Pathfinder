@@ -14,7 +14,6 @@ class AbtractBlock(object):
                  block_type: str = Blocks.ABSTRACT, damageable: bool = False) -> None:
         self.pos_x: int = posx
         self.pos_y: int = posy
-        self.color: Tuple[int, int, int] = color
         self.block_type: str = block_type
         self.rows: int = NUMBER_OF_OF_BLOCKS[1]
         self.columns: int = NUMBER_OF_OF_BLOCKS[0]
@@ -23,6 +22,9 @@ class AbtractBlock(object):
         self.def_width: float = self.screen_width / self.columns
         self.def_height: float = self.screen_height / self.rows
         self.damageable = damageable
+        self.color = color
+        if type(color) == pygame.Surface:
+            self.color = pygame.transform.scale(self.color, (int(self.def_width), int(self.def_height)))
 
     # this method is supposed to update object's position every clock's tick
     # if necessery - it should be overriden
@@ -30,13 +32,16 @@ class AbtractBlock(object):
     def update(self, matrix, moveable_objects) -> None:
         pass
 
-    # this method is standard render method - draws square in right place in window
+    # this method is standard render method - draws square in right place in window or picture
     @abstractmethod
     def render(self, screen: pygame.Surface) -> None:
-        buf_rect = pygame.Rect(self.pos_x * self.def_width,
-                               self.pos_y * self.def_height,
-                               self.def_width, self.def_height)
-        pygame.draw.rect(screen, self.color, buf_rect)
+        if type(self.color) == tuple:
+            buf_rect = pygame.Rect(self.pos_x * self.def_width,
+                                   self.pos_y * self.def_height,
+                                   self.def_width, self.def_height)
+            pygame.draw.rect(screen, self.color, buf_rect)
+        else:
+            screen.blit(self.color, (self.pos_x * self.def_width, self.pos_y * self.def_height))
 
     # this method supports checking if it is possible to move into particular block
     # noinspection PyMethodMayBeStatic

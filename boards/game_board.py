@@ -26,7 +26,6 @@ class Game(object):
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.matrix = Matrix(NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
         self.player = None
-        self.enemy = None
         self.moveable_objects = list()
         self.graphh = MyOwnGraph(self.matrix, NUMBER_OF_OF_BLOCKS[0], NUMBER_OF_OF_BLOCKS[1])
         self.initialize_level()
@@ -73,8 +72,8 @@ class Game(object):
         x = random.randrange(0, NUMBER_OF_OF_BLOCKS[0])
         y = random.randrange(0, NUMBER_OF_OF_BLOCKS[1])
         if self.matrix.two_dim_list[x][y]:
-            self.enemy = Enemy(x, y, self.graphh)
-            self.moveable_objects.append(self.enemy)
+            enemy = Enemy(x, y, self.graphh)
+            self.moveable_objects.append(enemy)
         else:
             return self.initialize_enemy()
 
