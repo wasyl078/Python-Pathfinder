@@ -9,6 +9,7 @@ from typing import List, Tuple
 from graphs.graph import MyOwnGraph
 from blocks.bomb_block import Bomb
 from general.limited_stack import LimitedUniqueStack
+from blocks.explosion_block import Explosion
 
 
 # enemy block / object is always looking for player by using a* pathfinding algorithm
@@ -38,7 +39,7 @@ class Enemy(AbtractBlock):
         if self.timer_to_move <= 0:
             decision, some_block = self.choose_decison(moveable_objects)
             if self.escape_timer > 0:
-                self.dec_escape(matrix, moveable_objects)
+                self.dec_escape(some_block, matrix, moveable_objects)
             elif decision == 0:
                 self.dec_move_to_player(some_block, matrix, moveable_objects)
                 self.last_visited_places.push(matrix.two_dim_list[self.pos_x][self.pos_y])
@@ -46,11 +47,11 @@ class Enemy(AbtractBlock):
                 self.dec_place_bomb(some_block, matrix, moveable_objects)
                 self.last_visited_places.push(matrix.two_dim_list[self.pos_x][self.pos_y])
             elif decision == -1:
-                self.dec_escape(matrix, moveable_objects)
-                self.escape_timer = 60
+                self.dec_escape(some_block, matrix, moveable_objects)
+                self.escape_timer = 120
             self.timer_to_move = self.def_time_between_moves
 
-# finds player to follow (the one, whick is closest to enemy)
+    # finds player to follow (the one, whick is closest to enemy)
     def find_closest_player(self, moveable_objects: List[AbtractBlock]) -> AbtractBlock:
         closest_player = None
         smallest_distance = sys.maxsize * 2 + 1
@@ -76,7 +77,8 @@ class Enemy(AbtractBlock):
 
         # no threats -> check if player is close
         player = self.find_closest_player(moveable_objects)
-        if self.distance_horizontal(player, self) < self.bombs_power and self.distance_vertical(player, self) < self.bombs_power:
+        if self.distance_horizontal(player, self) < self.bombs_power and self.distance_vertical(player,
+                                                                                                self) < self.bombs_power:
             if (self.pos_x == player.pos_x and self.pos_y != player.pos_y) or \
                     (self.pos_x != player.pos_x and self.pos_y == player.pos_y):
                 return 1, player
@@ -93,12 +95,24 @@ class Enemy(AbtractBlock):
             self.pos_y = path[-1].y
 
     # decision: excape - when enemy is in range of bomb
-    def dec_escape(self, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
+    def dec_escape(self, bomb: Bomb, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
         print("escape")
         last_block = self.last_visited_places.pop()
         if last_block is not None:
+            for explo in moveable_objects:
+                if explo.block_type == Explosion and last_block.pos_x == explo.pos_x and last_block.pos_y == explo.pos_y:
+                    return
             self.pos_x = last_block.pos_x
             self.pos_y = last_block.pos_y
+        else:
+            save_x, save_y = self.find_close_save_position(matrix)
+
+            for explo in moveable_objects:
+                if explo.block_type == Explosion and save_x == explo.pos_x and save_y == explo.pos_y:
+                    return
+
+            self.pos_x = save_x
+            self.pos_y = save_y
 
     # decision: place bomb - when player is in range of enemy's attack
     def dec_place_bomb(self, player: Player, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
@@ -116,6 +130,37 @@ class Enemy(AbtractBlock):
     # calculate distance only vertical
     def distance_vertical(self, block_1: AbtractBlock, block_2: AbtractBlock):
         return abs(block_1.pos_y - block_2.pos_y)
+
+    # finds close save position: near block that won't explode
+    def find_close_save_position(self, matrix: Matrix):
+        x = self.pos_x
+        y = self.pos_y
+        up_block = None
+        down_block = None
+        left_block = None
+        right_block = None
+        if matrix.check(x, y - 1):
+            up_block = matrix.two_dim_list[x][y - 1]
+        if matrix.check(x, y + 1):
+            down_block = matrix.two_dim_list[x][y + 1]
+        if matrix.check(x - 1, y):
+            left_block = matrix.two_dim_list[x - 1][y]
+        if matrix.check(x + 1, y):
+            right_block = matrix.two_dim_list[x + 1][y]
+        # up
+        if up_block is not None and (up_block.block_type == Blocks.BACKGROUND):
+            return x, y - 1
+        # down
+        elif down_block is not None and (down_block.block_type == Blocks.BACKGROUND):
+            return x, y + 1
+        # left
+        elif left_block is not None and (left_block.block_type == Blocks.BACKGROUND):
+            return x - 1, y
+        # right
+        elif right_block is not None and (right_block.block_type == Blocks.BACKGROUND):
+            return x + 1, y
+        else:
+            return x, y
 
     # cannot move into enemy:
     def __bool__(self):

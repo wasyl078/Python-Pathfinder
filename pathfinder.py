@@ -21,4 +21,3 @@ if __name__ == "__main__":
 # TODO boards (game engine) refactor (as queue)
 # TODO code refactor (e.x generator: for + if, comments, type hints)
 # TODO over network multiplayer
-# TODO first linux commit
