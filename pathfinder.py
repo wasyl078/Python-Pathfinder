@@ -4,7 +4,7 @@ from boards.game_board import Game
 from boards.game_setup_board import GameSetup
 
 # avoiding display scalling by windows "maku UI larger or smaller"
-ctypes.windll.user32.SetProcessDPIAware()
+#ctypes.windll.user32.SetProcessDPIAware()
 
 # starting game:
 if __name__ == "__main__":
