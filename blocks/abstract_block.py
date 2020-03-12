@@ -1,5 +1,4 @@
 # imports
-import pygame
 from abc import abstractmethod
 from general.consts_values import *
 from typing import Tuple
@@ -39,6 +38,7 @@ class AbtractBlock(object):
             buf_rect = pygame.Rect(self.pos_x * self.def_width,
                                    self.pos_y * self.def_height,
                                    self.def_width, self.def_height)
+            self.color = (min(self.color[0], 255), min(self.color[1], 255), min(self.color[2], 255))
             pygame.draw.rect(screen, self.color, buf_rect)
         else:
             screen.blit(self.color, (self.pos_x * self.def_width, self.pos_y * self.def_height))
