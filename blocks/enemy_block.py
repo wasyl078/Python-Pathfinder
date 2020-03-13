@@ -20,10 +20,11 @@ class Enemy(AbtractBlock):
     def __init__(self, pos_x: int, pos_y: int, graph: MyOwnGraph) -> None:
         super().__init__(pos_x, pos_y, Color.PAWEL_PNG, Blocks.ENEMY, True)
         self.graph = graph
-        self.last_visited_places = LimitedUniqueStack(1)
         self.bombs_power = 3
         self.def_time_between_moves = 10
         self.timer_to_move = self.def_time_between_moves
+        self.def_escape_timer = 120
+        self.escape_timer = 0
 
     # updates position - it depends on player's position
     @abstractmethod
@@ -34,16 +35,24 @@ class Enemy(AbtractBlock):
     # noinspection PyTypeChecker
     def update_better_ai(self, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
         self.timer_to_move -= 1
+        self.escape_timer -= 1
         if self.timer_to_move <= 0:
             decision, some_block = self.choose_decison(moveable_objects)
-            if decision == 0:
+            if self.escape_timer > 0:
+                self.dec_escape(some_block, matrix, moveable_objects)
+            elif decision == 0:
                 self.dec_move_to_player(some_block, matrix, moveable_objects)
-                self.last_visited_places.push(matrix.two_dim_list[self.pos_x][self.pos_y])
             elif decision == 1:
-                self.dec_place_bomb(some_block, matrix, moveable_objects)
-                self.last_visited_places.push(matrix.two_dim_list[self.pos_x][self.pos_y])
+                self.dec_place_bomb(matrix, moveable_objects)
+                self.escape_timer = self.def_escape_timer
             elif decision == -1:
                 self.dec_escape(some_block, matrix, moveable_objects)
+                if self.escape_timer > 0:
+                    self.escape_timer += 30
+                else:
+                    self.escape_timer = 30
+            elif decision == -2:
+                self.dec_suicide(matrix, moveable_objects)
             self.timer_to_move = self.def_time_between_moves
 
     def find_closest_moveable_object(self, block_type: str, moveable_objects: List[AbtractBlock]) -> AbtractBlock:
@@ -60,16 +69,19 @@ class Enemy(AbtractBlock):
 
     # chooses decision: no threat, no enemy in sight - follow path (0, player)
     # bomb in sight - escape (-1, bomb) | player in sight: place bomb (1, player)
+    # no player - suicide (-2, self)
     def choose_decison(self, moveable_objects: List[AbtractBlock]) -> Tuple[int, AbtractBlock]:
         # finding threats - biggest priority
         bombs = (elem for elem in moveable_objects if elem.block_type == Blocks.BOMB)
         for bomb in bombs:
             # noinspection PyUnresolvedReferences
-            if self.distance_between(self, bomb) < bomb.explo_range:
+            if self.distance_between(self, bomb) <= bomb.explo_range:
                 return -1, bomb
 
-        # no threats -> check if player is close
+        # no threats -> check if player is close, check if player is not None
         player = self.find_closest_moveable_object(Blocks.PLAYER, moveable_objects)
+        if player is None:
+            return -2, self
         if self.distance_horizontal(player, self) < self.bombs_power and \
                 self.distance_vertical(player, self) < self.bombs_power:
             if (self.pos_x == player.pos_x and self.pos_y != player.pos_y) or \
@@ -84,59 +96,50 @@ class Enemy(AbtractBlock):
         print("move")
         path = self.graph.find_a_star_path(self.pos_x, self.pos_y, player.pos_x, player.pos_y)
         if self.check_place(path[-1].x, path[-1].y, matrix, moveable_objects):
-            self.try_to_change_position(path[-1].x, path[-1].y, matrix, moveable_objects)
+            self.try_to_move(path[-1].x, path[-1].y, matrix, moveable_objects)
 
     # decision: excape - when enemy is in range of bomb
     def dec_escape(self, bomb: Bomb, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
-        print("escape")
-        last_block = self.last_visited_places.pop()
-        if last_block is not None:
-            for explo in moveable_objects:
-                if explo.block_type == Explosion and last_block.pos_x == explo.pos_x and last_block.pos_y == explo.pos_y:
-                    return
-            self.pos_x = last_block.pos_x
-            self.pos_y = last_block.pos_y
-        else:
-            next_x, next_y = self.find_block_to_escape(matrix, moveable_objects)
-            self.try_to_change_position(next_x, next_y, matrix, moveable_objects)
+        print("escape {}".format(self.escape_timer))
+        x = self.pos_x
+        y = self.pos_y
+        saver_blocks = [self]
+        if self.check(x, y - 1, matrix, moveable_objects):
+            saver_blocks.append(matrix.two_dim_list[x][y - 1])
+        if self.check(x, y + 1, matrix, moveable_objects):
+            saver_blocks.append(matrix.two_dim_list[x][y + 1])
+        if self.check(x - 1, y, matrix, moveable_objects):
+            saver_blocks.append(matrix.two_dim_list[x - 1][y])
+        if self.check(x + 1, y, matrix, moveable_objects):
+            saver_blocks.append(matrix.two_dim_list[x + 1][y])
+        for block in saver_blocks:
+            print("{} -> {}".format(block, self.calculate_position_danger_level(block, matrix, moveable_objects)))
+        savest_index = -1
+        savest_level = 0
+        for i in range(len(saver_blocks)):
+            lvl = self.calculate_position_danger_level(saver_blocks[i], matrix, moveable_objects)
+            if lvl > savest_level:
+                savest_index = i
+                savest_level = lvl
+        savest_block = saver_blocks[savest_index]
+        self.try_to_move_light(savest_block.pos_x, savest_block.pos_y, matrix, moveable_objects)
 
-    def find_block_to_escape(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
-        next_move_blocks = list()
-        # up
-        if matrix.check(self.pos_x, self.pos_y - 1):
-            next_move_blocks.append(matrix.two_dim_list[self.pos_x][self.pos_y - 1])
-        # down
-        if matrix.check(self.pos_x, self.pos_y + 1):
-            next_move_blocks.append(matrix.two_dim_list[self.pos_x][self.pos_y + 1])
-        # left
-        if matrix.check(self.pos_x - 1, self.pos_y):
-            next_move_blocks.append(matrix.two_dim_list[self.pos_x - 1][self.pos_y])
-        # right
-        if matrix.check(self.pos_x + 1, self.pos_y):
-            next_move_blocks.append(matrix.two_dim_list[self.pos_x + 1][self.pos_y])
-
-        next_dangers = [self.calculate_position_danger_level(danger, matrix, moveable_objects) for danger in next_move_blocks]
-        print(next_dangers)
-
-        least_danger = min(next_dangers)
-        return next_move_blocks[next_dangers.index(least_danger)].pos_x, next_move_blocks[next_dangers.index(least_danger)].pos_y
+    def dec_suicide(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
+        for block in moveable_objects:
+            if block.block_type == Bomb and block.pos_x == self.pos_x and block.pos_y == self.pos_y:
+                return
+        self.dec_place_bomb(matrix, moveable_objects)
 
     # noinspection PyUnresolvedReferences
     def calculate_position_danger_level(self, next_pos: AbtractBlock, matrix: Matrix, moveable_objects: List[AbtractBlock]):
-        x = next_pos.pos_x
-        y = next_pos.pos_y
-        danger_level = 0
-        if matrix.checks_blocks_type(x, y) == Blocks.WALL:
-            return -1
+        danger = 0
         for block in moveable_objects:
-            if block.block_type == Blocks.BOMB:
-                distance = self.distance_between(self, AbtractBlock(x, y))
-                if distance <= block.explo_range:
-                    danger_level += 1000 / distance
-        return danger_level
+            if block.block_type == Blocks.PLAYER or block.block_type == Blocks.BOMB or block.block_type == Blocks.EXPLOSION:
+                danger += self.distance_between(next_pos, block)
+        return danger
 
     # decision: place bomb - when player is in range of enemy's attack
-    def dec_place_bomb(self, player: Player, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
+    def dec_place_bomb(self, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
         print("place")
         moveable_objects.append(Bomb(self.pos_x, self.pos_y, self.bombs_power))
 
@@ -149,7 +152,7 @@ class Enemy(AbtractBlock):
                 blocks.append(block)
         return blocks
 
-    def try_to_change_position(self, new_x: int, new_y: int, matrix: Matrix, moveable_objects: List[AbtractBlock]):
+    def try_to_move(self, new_x: int, new_y: int, matrix: Matrix, moveable_objects: List[AbtractBlock]):
         if matrix.checks_blocks_type(new_x, new_y) != Blocks.BACKGROUND:
             return
         for objectt in moveable_objects:
@@ -163,6 +166,24 @@ class Enemy(AbtractBlock):
 
         self.pos_x = new_x
         self.pos_y = new_y
+
+    def try_to_move_light(self, new_x: int, new_y: int, matrix: Matrix, moveable_objects: List[AbtractBlock]):
+        for block in moveable_objects:
+            if block.block_type == Explosion and block.pos_x == new_x and block.pos_y == new_y:
+                return
+        self.pos_x = new_x
+        self.pos_y = new_y
+
+    def check(self, x, y, matrix: Matrix, moveable_objects: List[AbtractBlock]):
+        if x < 0 or x >= self.columns or y < 0 or y >= self.rows:
+            return False
+        if matrix.two_dim_list[x][y].block_type == Blocks.WALL:
+            return False
+        for block in moveable_objects:
+            if block.pos_x == x and block.pos_y == y:
+                if block.block_type == Blocks.PLAYER or block.block_type == Blocks.BOMB:
+                    return False
+        return True
 
     # calculate distance between two blocks / objects
     def distance_between(self, block_1: AbtractBlock, block_2: AbtractBlock) -> float:

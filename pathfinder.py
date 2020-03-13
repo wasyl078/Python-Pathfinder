@@ -16,10 +16,10 @@ if __name__ == "__main__":
     actual_game.game_loop(actual_game, color_or_png)
 
 
-# TODO enemy's AI
+# TODO code refactor (e.x generator: for + if, comments, type hints)
 # TODO local multiplayer
 # TODO special blocks
 # TODO new players pictures
 # TODO boards (game engine) refactor (as queue)
-# TODO code refactor (e.x generator: for + if, comments, type hints)
+# TODO code refactor
 # TODO over network multiplayer

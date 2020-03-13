@@ -86,6 +86,12 @@ class Game(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     sys.exit()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
+                    self.update()
+                    self.update()
+                    self.update()
+                    self.update()
+                    self.update()
                 self.player.update_single_jump(self.matrix, self.moveable_objects, event)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                     # noinspection PyShadowingNames

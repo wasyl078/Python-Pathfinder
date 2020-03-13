@@ -29,7 +29,7 @@ class Bomb(AbtractBlock):
         self.deal_damage_to("left", matrix, moveable_objects)
         self.deal_damage_to("right", matrix, moveable_objects)
 
-    # deals damage to particular direction -> till counters wall block
+    # deals damage to particular directttion -> till counters wall block
     def deal_damage_to(self, direction: str, matrix: Matrix, moveable_objects: List[AbtractBlock]):
         x = self.pos_x
         y = self.pos_y
