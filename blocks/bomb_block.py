@@ -14,12 +14,12 @@ class Bomb(AbtractBlock):
     def __init__(self, pos_x: int, pos_y: int, explo_range):
         super().__init__(pos_x, pos_y, Color.YELLOW, Blocks.BOMB, True)
         self.explo_range = explo_range
-        self.def_timer = 90
-        self.timer = self.def_timer
-        self.extra_height = 0
-        self.extra_width = 0
-        self.width = 0
-        self.height = 0
+        self.__def_timer = 90
+        self.timer = self.__def_timer
+        self.__extra_height = 0
+        self.__extra_width = 0
+        self.__width = 0
+        self.__height = 0
 
     # bombs tick - after 90 ticks (1 1/2 sec.) bomb explodes
     @abstractmethod
@@ -37,11 +37,11 @@ class Bomb(AbtractBlock):
 
     # bomb changes its size and color while loading
     def color_size_update(self):
-        self.color = (self.color[0], self.color[1] - int(255 / self.def_timer), self.color[2])
-        self.extra_width = int(self.def_width / 2) - int((1 - self.timer / self.def_timer) * self.def_width / 2)
-        self.extra_height = int(self.def_height / 2) - int((1 - self.timer / self.def_timer) * self.def_height / 2)
-        self.width = int((1 - self.timer / self.def_timer) * self.def_width)
-        self.height = int((1 - self.timer / self.def_timer) * self.def_height)
+        self.color = (self.color[0], self.color[1] - int(255 / self.__def_timer), self.color[2])
+        self.__extra_width = int(self.def_width / 2) - int((1 - self.timer / self.__def_timer) * self.def_width / 2)
+        self.__extra_height = int(self.def_height / 2) - int((1 - self.timer / self.__def_timer) * self.def_height / 2)
+        self.__width = int((1 - self.timer / self.__def_timer) * self.def_width)
+        self.__height = int((1 - self.timer / self.__def_timer) * self.def_height)
 
     # deals damage to near blocks / objects
     def deal_damage_in_cross(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
@@ -61,9 +61,9 @@ class Bomb(AbtractBlock):
     # this method is special render method - bombs is small and gets bigger with time
     @abstractmethod
     def render(self, screen: pygame.Surface) -> None:
-        buf_rect = pygame.Rect(self.pos_x * self.def_width + self.extra_width,
-                               self.pos_y * self.def_height + self.extra_height,
-                               self.width, self.height)
+        buf_rect = pygame.Rect(self.pos_x * self.def_width + self.__extra_width,
+                               self.pos_y * self.def_height + self.__extra_height,
+                               self.__width, self.__height)
         pygame.draw.rect(screen, self.color, buf_rect)
 
     # cannot move into bomb block

@@ -18,8 +18,8 @@ class MyOwnGraph(object):
     # and generates the simplest mesh-like graph
     def __init__(self, matrix: Matrix, columns: int, rows: int):
         self.two_dim_list: List[List[AbtractBlock]] = matrix.two_dim_list
-        self.columns: int = columns
-        self.rows: int = rows
+        self.columns = columns
+        self.rows = rows
         self.nodes: List[List[Node]] = [[Node(y, x) for x in range(rows)] for y in range(columns)]
 
     # ------------------------------makes maze with Prim's algorithm --------------------------------------------------

@@ -16,7 +16,6 @@ if __name__ == "__main__":
     actual_game.game_loop(actual_game, color_or_png)
 
 
-# TODO private variables
 # TODO ------------------------------constructor / updates and renders / helping methods------------------
 # TODO local moveable objects and matrix
 # TODO

@@ -17,36 +17,36 @@ class Enemy(AbtractBlock):
     # constructor - setting enemy object; receives graph
     def __init__(self, pos_x: int, pos_y: int, graph: MyOwnGraph):
         super().__init__(pos_x, pos_y, Color.PAWEL_PNG, Blocks.ENEMY, True)
-        self.graph = graph
+        self.__graph = graph
         self.bombs_power = 3
-        self.def_time_between_moves = 10
-        self.timer_to_move = self.def_time_between_moves
-        self.def_escape_timer = 120
-        self.escape_timer = 0
+        self.__def_time_between_moves = 10
+        self.__timer_to_move = self.__def_time_between_moves
+        self.__def_escape_timer = 120
+        self.__escape_timer = 0
 
     # updates position - it depends on player's position
     @abstractmethod
     def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
-        self.timer_to_move -= 1
-        self.escape_timer -= 1
-        if self.timer_to_move <= 0:
+        self.__timer_to_move -= 1
+        self.__escape_timer -= 1
+        if self.__timer_to_move <= 0:
             decision, some_block = self.choose_decison(moveable_objects)
-            if self.escape_timer > 0:
+            if self.__escape_timer > 0:
                 self.dec_escape(matrix, moveable_objects)
             elif decision == 0:
                 self.dec_move_to_player(some_block, matrix, moveable_objects)
             elif decision == 1:
                 self.dec_place_bomb(moveable_objects)
-                self.escape_timer = self.def_escape_timer
+                self.__escape_timer = self.__def_escape_timer
             elif decision == -1:
                 self.dec_escape(matrix, moveable_objects)
-                if self.escape_timer > 0:
-                    self.escape_timer += 45
+                if self.__escape_timer > 0:
+                    self.__escape_timer += 45
                 else:
-                    self.escape_timer = 45
+                    self.__escape_timer = 45
             elif decision == -2:
                 self.dec_suicide(moveable_objects)
-            self.timer_to_move = self.def_time_between_moves
+            self.__timer_to_move = self.__def_time_between_moves
 
     # chooses decision: no threat, no enemy in sight - follow path (0, player)
     # bomb in sight - escape (-1, bomb) | player in sight: place bomb (1, player)
@@ -102,7 +102,7 @@ class Enemy(AbtractBlock):
 
     # decision: move towards player - there is no threat
     def dec_move_to_player(self, player: AbtractBlock, matrix: Matrix, moveable_objects: List[AbtractBlock]):
-        path = self.graph.find_a_star_path(self.pos_x, self.pos_y, player.pos_x, player.pos_y)
+        path = self.__graph.find_a_star_path(self.pos_x, self.pos_y, player.pos_x, player.pos_y)
         if self.check_place(path[-1].x, path[-1].y, matrix, moveable_objects):
             self.try_to_move(path[-1].x, path[-1].y, matrix, moveable_objects)
 

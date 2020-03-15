@@ -9,10 +9,10 @@ class GameSetup(object):
 
     # constructor - creates variables and initialize menu
     def __init__(self):
-        self.tps_max = 30.0
-        self.choosen_color = None
-        self.tps_clock = pygame.time.Clock()
-        self.tps_delta = 0.0
+        self.__tps_max = 30.0
+        self.__choosen_color = None
+        self.__tps_clock = pygame.time.Clock()
+        self.__tps_delta = 0.0
         pygame.init()
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.screen_width: int = pygame.display.Info().current_w
@@ -22,16 +22,16 @@ class GameSetup(object):
 
     # "menu game" loop, returns user's choice
     def game_setup_loop(self) -> str:
-        while self.choosen_color is None:
+        while self.__choosen_color is None:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     sys.exit()  # press ESC to exit menu
-            self.tps_delta += self.tps_clock.tick() / 1000.0
-            while self.tps_delta > 1 / self.tps_max:
+            self.__tps_delta += self.__tps_clock.tick() / 1000.0
+            while self.__tps_delta > 1 / self.__tps_max:
                 self.update()
-                self.tps_delta -= 1 / self.tps_max
+                self.__tps_delta -= 1 / self.__tps_max
             self.render()
-        return self.choosen_color
+        return self.__choosen_color
 
     # uses list of choices (from consts_values.py) to visualise these icon for user
     def initialize_color_rectangles(self):
@@ -51,7 +51,7 @@ class GameSetup(object):
         mouse_pos = pygame.mouse.get_pos()
         for color_rect in self.color_rectangles:
             if color_rect.check_collide_point(mouse_pos):
-                self.choosen_color = color_rect.color_or_picture
+                self.__choosen_color = color_rect.color_or_picture
 
     # renders icons and background image
     def render(self):

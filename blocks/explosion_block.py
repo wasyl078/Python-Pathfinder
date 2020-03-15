@@ -11,17 +11,17 @@ class Explosion(AbtractBlock):
     # constructor - explosion are coloured: from RED to YELLOW
     def __init__(self, pos_x: int, pos_y: int):
         super().__init__(pos_x, pos_y, Color.RED, Blocks.EXPLOSION, False)
-        self.def_time_to_live = 30
-        self.time_to_live = self.def_time_to_live
+        self.__def_time_to_live = 30
+        self.__time_to_live = self.__def_time_to_live
 
     # changes color from red to yellow
     @abstractmethod
     def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
-        self.color = (self.color[0], min(self.color[1] + int(255 / self.def_time_to_live), 255), self.color[2])
+        self.color = (self.color[0], min(self.color[1] + int(255 / self.__def_time_to_live), 255), self.color[2])
         self.damage_to_blocks(matrix)
         self.damage_to_objects(moveable_objects)
-        self.time_to_live -= 1
-        if self.time_to_live < 0:
+        self.__time_to_live -= 1
+        if self.__time_to_live < 0:
             moveable_objects.remove(self)
 
     # deals damage to blocks - walls

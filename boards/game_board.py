@@ -16,10 +16,10 @@ class Game(object):
     # also initializes game frame
     def __init__(self, players_color_or_png):
         # vars and consts
-        self.tps_max = 30.0
-        self.game_finished = False
-        self.tps_clock = pygame.time.Clock()
-        self.tps_delta = 0.0
+        self.__tps_max = 30.0
+        self.__game_finished = False
+        self.__tps_clock = pygame.time.Clock()
+        self.__tps_delta = 0.0
         # initialization
         pygame.init()
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -85,7 +85,7 @@ class Game(object):
 
     # game loop is checking events (from keyboard, window) by calling objects' update() also calls render() and update()
     def game_loop(self, actual_game, players_color_or_png):
-        while not self.game_finished:
+        while not self.__game_finished:
             # events handling
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
@@ -96,10 +96,10 @@ class Game(object):
                     actual_game.game_loop(actual_game, players_color_or_png)     # press R to restart game
 
             # updates handling
-            self.tps_delta += self.tps_clock.tick() / 1000.0
-            while self.tps_delta > 1 / self.tps_max:
+            self.__tps_delta += self.__tps_clock.tick() / 1000.0
+            while self.__tps_delta > 1 / self.__tps_max:
                 self.update()
-                self.tps_delta -= 1 / self.tps_max
+                self.__tps_delta -= 1 / self.__tps_max
 
             # calls render
             self.render()
