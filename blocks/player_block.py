@@ -14,9 +14,30 @@ class Player(AbtractBlock):
     def __init__(self, pos_x: int, pos_y: int, players_color_or_png: pygame.Surface):
         super().__init__(pos_x, pos_y, players_color_or_png, Blocks.PLAYER, True)
         self.bombs_power = 5
+        self.delay = 0
 
-    # another way to handle keyboard events by Player
-    def update_single_jump(self, matrix: Matrix, moveable_objects: List[AbtractBlock], event: pygame.event):
+    # jumps - way to handle keyboard events by Player number ONE
+    def update_single_jump_first(self, matrix: Matrix, moveable_objects: List[AbtractBlock], event: pygame.event):
+        if self not in moveable_objects:
+            return
+        # player actions are only available for alive player
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_d:
+            if self.check_place(self.pos_x + 1, self.pos_y, matrix, moveable_objects):
+                self.pos_x += 1
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
+            if self.check_place(self.pos_x - 1, self.pos_y, matrix, moveable_objects):
+                self.pos_x -= 1
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_s:
+            if self.check_place(self.pos_x, self.pos_y + 1, matrix, moveable_objects):
+                self.pos_y += 1
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_w:
+            if self.check_place(self.pos_x, self.pos_y - 1, matrix, moveable_objects):
+                self.pos_y -= 1
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            self.place_bomb(moveable_objects)
+
+    # jumps - way to handle keyboard events by Player number TWO
+    def update_single_jump_second(self, matrix: Matrix, moveable_objects: List[AbtractBlock], event: pygame.event):
         if self not in moveable_objects:
             return
         # player actions are only available for alive player
@@ -32,7 +53,51 @@ class Player(AbtractBlock):
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
             if self.check_place(self.pos_x, self.pos_y - 1, matrix, moveable_objects):
                 self.pos_y -= 1
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+            self.place_bomb(moveable_objects)
+
+    # smooth moving - way to handle keyboard events by Player number ONE
+    def update_position_v1(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
+        self.delay -= 1
+        deley = 4
+        if self.delay > 0:
+            return
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_d] and self.check_place(self.pos_x + 1, self.pos_y, matrix, moveable_objects):
+            self.pos_x += 1
+            self.delay = deley
+        if keys[pygame.K_a] and self.check_place(self.pos_x - 1, self.pos_y, matrix, moveable_objects):
+            self.pos_x -= 1
+            self.delay = deley
+        if keys[pygame.K_s] and self.check_place(self.pos_x, self.pos_y + 1, matrix, moveable_objects):
+            self.pos_y += 1
+            self.delay = deley
+        if keys[pygame.K_w] and self.check_place(self.pos_x, self.pos_y - 1, matrix, moveable_objects):
+            self.pos_y -= 1
+            self.delay = deley
+        if keys[pygame.K_SPACE]:
+            self.place_bomb(moveable_objects)
+
+    # smooth moving - way to handle keyboard events by Player number TWO
+    def update_position_v2(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
+        self.delay -= 1
+        deley = 4
+        if self.delay > 0:
+            return
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and self.check_place(self.pos_x + 1, self.pos_y, matrix, moveable_objects):
+            self.pos_x += 1
+            self.delay = deley
+        if keys[pygame.K_LEFT] and self.check_place(self.pos_x - 1, self.pos_y, matrix, moveable_objects):
+            self.pos_x -= 1
+            self.delay = deley
+        if keys[pygame.K_DOWN] and self.check_place(self.pos_x, self.pos_y + 1, matrix, moveable_objects):
+            self.pos_y += 1
+            self.delay = deley
+        if keys[pygame.K_UP] and self.check_place(self.pos_x, self.pos_y - 1, matrix, moveable_objects):
+            self.pos_y -= 1
+            self.delay = deley
+        if keys[pygame.K_RETURN]:
             self.place_bomb(moveable_objects)
 
     # places bomb (if it is possible)

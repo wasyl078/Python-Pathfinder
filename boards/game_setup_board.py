@@ -1,6 +1,6 @@
 import pygame
 from general.consts_values import Color
-from typing import Tuple
+from typing import Tuple, List
 import sys
 
 
@@ -10,19 +10,27 @@ class GameSetup(object):
     # constructor - creates variables and initialize menu
     def __init__(self):
         self.__tps_max = 30.0
-        self.__choosen_color = None
         self.__tps_clock = pygame.time.Clock()
         self.__tps_delta = 0.0
         pygame.init()
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.screen_width: int = pygame.display.Info().current_w
         self.screen_height: int = pygame.display.Info().current_h
-        self.color_rectangles = list()
+        self.color_rectangles: List[PngOrColorRectangle] = list()
         self.initialize_color_rectangles()
+        self.finished_timer = -1
+        self.finished = False
+        self.player_one_icon = None
+        self.player_two_icon = None
+        self.p1_rectagnle = PngOrColorRectangle(int(self.screen_width / 5.56), int(self.screen_height / 2.87),
+                                                self.screen_width / 30, self.screen_width / 30, Color.RED)
+        self.p2_rectagnle = PngOrColorRectangle(int(self.screen_width / 1.1), int(self.screen_height / 2.87),
+                                                self.screen_width / 30, self.screen_width / 30, Color.RED)
+        self.mouse_pressed = False
 
     # "menu game" loop, returns user's choice
-    def game_setup_loop(self) -> str:
-        while self.__choosen_color is None:
+    def game_setup_loop(self):
+        while self.finished_timer > 0 or not self.finished:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     sys.exit()  # press ESC to exit menu
@@ -30,37 +38,57 @@ class GameSetup(object):
             while self.__tps_delta > 1 / self.__tps_max:
                 self.update()
                 self.__tps_delta -= 1 / self.__tps_max
+                self.finished_timer -= 1
+                print(self.finished_timer)
             self.render()
-        return self.__choosen_color
+        return self.player_one_icon, self.player_two_icon
 
     # uses list of choices (from consts_values.py) to visualise these icon for user
     def initialize_color_rectangles(self):
-        x = self.screen_width / 5
+        def_icon_width = int(self.screen_width / 30)
+        x_row_counter = 0
+        x = self.screen_width / 3
         y = self.screen_height * 5 / 10
         def_side = self.screen_width / 30
         for color in Color.playable_colors_list:
-            buf_rect = PngOrColorRectangle(x, y, def_side, def_side, color)
+            buf_rect = PngOrColorRectangle(x - int(def_icon_width / 2), y, def_side, def_side, color)
             self.color_rectangles.append(buf_rect)
-            x += self.screen_width / 5
-            if x == self.screen_width:
-                x = self.screen_width / 5
+            x += int(self.screen_width / 12)
+            x_row_counter += 1
+            if x_row_counter >= 5:
+                x = self.screen_width / 3
                 y += self.screen_height / 10
+                x_row_counter = 0
 
     # checks mouse position - player click on icon -> this is the choosen icon for Player Block
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         for color_rect in self.color_rectangles:
+            if not pygame.mouse.get_pressed()[0]:
+                self.mouse_pressed = False
             if color_rect.check_collide_point(mouse_pos):
-                self.__choosen_color = color_rect.color_or_picture
+                if self.player_one_icon is None:
+                    self.player_one_icon = color_rect.color_or_picture
+                    self.mouse_pressed = True
+                    self.p1_rectagnle.color_or_picture = self.p1_rectagnle.initialize_icon(color_rect.color_or_picture)
+                    print(1)
+                elif self.player_two_icon is None and not self.mouse_pressed:
+                    self.p2_rectagnle.color_or_picture = self.p2_rectagnle.initialize_icon(color_rect.color_or_picture)
+                    self.player_two_icon = color_rect.color_or_picture
+                    self.finished_timer = 60
+                    self.finished = True
+                    print(2)
 
     # renders icons and background image
     def render(self):
         self.screen.fill(Color.BLACK)
-        img = pygame.image.load("pictures/pathfinder menu v2.png")
+        img = pygame.image.load("pictures/pathfinder menu 2 players.png")
         img = pygame.transform.scale(img, (self.screen_width, self.screen_height))
         self.screen.blit(img, (0, 0))
         for color_rect in self.color_rectangles:
             color_rect.draw_rect(self.screen)
+        self.p1_rectagnle.draw_rect(self.screen)
+        self.p2_rectagnle.draw_rect(self.screen)
         pygame.display.flip()
 
 

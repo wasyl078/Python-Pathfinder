@@ -11,14 +11,11 @@ if platform.system() == 'Windows':
 # starting game:
 if __name__ == "__main__":
     actual_game = GameSetup()
-    color_or_png = actual_game.game_setup_loop()
-    actual_game = Game(color_or_png)
-    actual_game.game_loop(actual_game, color_or_png)
+    p1_icon, p2_icon = actual_game.game_setup_loop()
+    actual_game = Game(p1_icon, p2_icon)
+    actual_game.game_loop(actual_game)
 
 
-# TODO ------------------------------constructor / updates and renders / helping methods------------------
-# TODO local moveable objects and matrix
-# TODO
 # TODO local multiplayer
 # TODO special blocks (path, increase bomb range)
 # TODO kicking bombs !
