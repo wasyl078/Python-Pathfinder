@@ -26,8 +26,7 @@ class Color(object):
     PAWEL2_PNG = pygame.image.load("pictures/pawel2.png")
     OGOREK_PNG = pygame.image.load("pictures/ogorek.png")
     OGOR_PNG = pygame.image.load("pictures/ogor.png")
-    playable_colors_list = [MEGA_LIGHT_GREEN, BLUE, PINK, LUKASZ_IMG, PIZZA_IMG, UFO_IMG, PAWEL2_PNG, PAWEL_PNG,
-                            OGOREK_PNG, OGOR_PNG]
+    playable_colors_list = [MEGA_LIGHT_GREEN, BLUE, PINK, LUKASZ_IMG, PIZZA_IMG, UFO_IMG, PAWEL2_PNG, PAWEL_PNG, OGOREK_PNG, OGOR_PNG]
 
 
 # object holding blocks2 types

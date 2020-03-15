@@ -1,10 +1,14 @@
 import pygame
 from general.consts_values import Color
+from typing import Tuple
 import sys
 
 
+# this is first thing you see when game starts - player icon choice menu
 class GameSetup(object):
-    def __init__(self) -> None:
+
+    # constructor - creates variables and initialize menu
+    def __init__(self):
         self.tps_max = 30.0
         self.choosen_color = None
         self.tps_clock = pygame.time.Clock()
@@ -16,12 +20,12 @@ class GameSetup(object):
         self.color_rectangles = list()
         self.initialize_color_rectangles()
 
+    # "menu game" loop, returns user's choice
     def game_setup_loop(self) -> str:
         while self.choosen_color is None:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-                    sys.exit()
-
+                    sys.exit()  # press ESC to exit menu
             self.tps_delta += self.tps_clock.tick() / 1000.0
             while self.tps_delta > 1 / self.tps_max:
                 self.update()
@@ -29,37 +33,40 @@ class GameSetup(object):
             self.render()
         return self.choosen_color
 
+    # uses list of choices (from consts_values.py) to visualise these icon for user
     def initialize_color_rectangles(self):
         x = self.screen_width / 5
         y = self.screen_height * 5 / 10
         def_side = self.screen_width / 30
         for color in Color.playable_colors_list:
-            buf_rect = ColorRectangle(x, y, def_side, def_side, color)
+            buf_rect = PngOrColorRectangle(x, y, def_side, def_side, color)
             self.color_rectangles.append(buf_rect)
             x += self.screen_width / 5
             if x == self.screen_width:
                 x = self.screen_width / 5
                 y += self.screen_height / 10
 
-    def update(self) -> None:
+    # checks mouse position - player click on icon -> this is the choosen icon for Player Block
+    def update(self):
         mouse_pos = pygame.mouse.get_pos()
         for color_rect in self.color_rectangles:
             if color_rect.check_collide_point(mouse_pos):
                 self.choosen_color = color_rect.color_or_picture
 
-    def render(self) -> None:
+    # renders icons and background image
+    def render(self):
         self.screen.fill(Color.BLACK)
         img = pygame.image.load("pictures/pathfinder menu v2.png")
         img = pygame.transform.scale(img, (self.screen_width, self.screen_height))
         self.screen.blit(img, (0, 0))
-
         for color_rect in self.color_rectangles:
             color_rect.draw_rect(self.screen)
-
         pygame.display.flip()
 
 
-class ColorRectangle(object):
+# class for icons that you can see in menu
+class PngOrColorRectangle(object):
+    # constructon - variables and initialization of icon
     def __init__(self, pos_x, pos_y, width, height, color_or_picture):
         self.rect = pygame.Rect(pos_x, pos_y, width, height)
         self.color_or_picture = color_or_picture
@@ -67,18 +74,23 @@ class ColorRectangle(object):
         self.screen_height: int = pygame.display.Info().current_h
         self.x = pos_x
         self.y = pos_y
-        if type(self.color_or_picture) == tuple:
-            self.color_or_picture = color_or_picture
-        elif type(self.color_or_picture) == pygame.Surface:
-            self.color_or_picture = pygame.transform.scale(self.color_or_picture,
-                                                           (int(self.screen_width / 30), int(self.screen_width / 30)))
+        self.color_or_picture = self.initialize_icon(color_or_picture)
 
-    def check_collide_point(self, mousepos):
+    # checks if icon is tuple or pygame.Surface
+    def initialize_icon(self, icon):
+        if type(self.color_or_picture) == tuple:
+            return icon
+        elif type(self.color_or_picture) == pygame.Surface:
+            return pygame.transform.scale(icon, (int(self.screen_width / 30), int(self.screen_width / 30)))
+
+    # checks if mouse is over icon
+    def check_collide_point(self, mousepos: Tuple[int, int]) -> bool:
         # noinspection PyArgumentList
         if self.rect.collidepoint(mousepos) and pygame.mouse.get_pressed()[0]:
             return True
         return False
 
+    # render of icon
     def draw_rect(self, screen):
         if type(self.color_or_picture) == tuple:
             pygame.draw.rect(screen, self.color_or_picture, self.rect)

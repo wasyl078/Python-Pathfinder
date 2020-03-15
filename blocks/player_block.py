@@ -1,9 +1,9 @@
 # imports
 import pygame
 from blocks.abstract_block import AbtractBlock, abstractmethod
-from general.consts_values import Blocks, Color
+from general.consts_values import Blocks
 from general.matrix_of_blocks import Matrix
-from typing import List, Tuple
+from typing import List
 from blocks.bomb_block import Bomb
 
 
@@ -11,12 +11,12 @@ from blocks.bomb_block import Bomb
 class Player(AbtractBlock):
 
     # constructor - setting player object
-    def __init__(self, pos_x: int, pos_y: int, players_color_or_png: Tuple[int, int, int]) -> None:
+    def __init__(self, pos_x: int, pos_y: int, players_color_or_png: pygame.Surface):
         super().__init__(pos_x, pos_y, players_color_or_png, Blocks.PLAYER, True)
         self.bombs_power = 5
 
     # another way to handle keyboard events by Player
-    def update_single_jump(self, matrix: Matrix, moveable_objects: List[AbtractBlock], event: pygame.event) -> None:
+    def update_single_jump(self, matrix: Matrix, moveable_objects: List[AbtractBlock], event: pygame.event):
         if self not in moveable_objects:
             return
         # player actions are only available for alive player
@@ -36,16 +36,15 @@ class Player(AbtractBlock):
             self.place_bomb(moveable_objects)
 
     # places bomb (if it is possible)
-    def place_bomb(self, moveable_objects: List[AbtractBlock]) -> None:
+    def place_bomb(self, moveable_objects: List[AbtractBlock]):
         for potential_bomb in moveable_objects:
-            if potential_bomb.block_type == Blocks.BOMB \
-                    and potential_bomb.pos_x == self.pos_x and potential_bomb.pos_y == self.pos_y:
+            if potential_bomb.block_type == Blocks.BOMB and potential_bomb.pos_x == self.pos_x and potential_bomb.pos_y == self.pos_y:
                 return
         moveable_objects.append(Bomb(self.pos_x, self.pos_y, self.bombs_power))
 
     # cannot move into player block
     @abstractmethod
-    def __bool__(self) -> bool:
+    def __bool__(self):
         return False
 
 # if keys[pygame.K_RIGHT] and matrix.check(self.pos_x + 1, self.pos_y):

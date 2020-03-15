@@ -9,15 +9,15 @@ from typing import List
 class Explosion(AbtractBlock):
 
     # constructor - explosion are coloured: from RED to YELLOW
-    def __init__(self, pos_x: int, pos_y: int) -> None:
+    def __init__(self, pos_x: int, pos_y: int):
         super().__init__(pos_x, pos_y, Color.RED, Blocks.EXPLOSION, False)
         self.def_time_to_live = 30
         self.time_to_live = self.def_time_to_live
 
     # changes color from red to yellow
     @abstractmethod
-    def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]) -> None:
-        self.color = (self.color[0], self.color[1] + int(255/self.def_time_to_live), self.color[2])
+    def update(self, matrix: Matrix, moveable_objects: List[AbtractBlock]):
+        self.color = (self.color[0], min(self.color[1] + int(255 / self.def_time_to_live), 255), self.color[2])
         self.damage_to_blocks(matrix)
         self.damage_to_objects(moveable_objects)
         self.time_to_live -= 1
@@ -25,7 +25,7 @@ class Explosion(AbtractBlock):
             moveable_objects.remove(self)
 
     # deals damage to blocks - walls
-    def damage_to_blocks(self, matrix: Matrix) -> None:
+    def damage_to_blocks(self, matrix: Matrix):
         matrix.set_block_to_background(self.pos_x, self.pos_y)
 
     # deals damage to objects

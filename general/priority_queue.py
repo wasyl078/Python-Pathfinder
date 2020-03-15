@@ -6,13 +6,13 @@ from typing import Callable, Any, List
 class PriorityQueue(object):
 
     # initialization of queue - by using list
-    def __init__(self, order_function: Callable) -> None:
+    def __init__(self, order_function: Callable):
         self.queue: List[Any] = list()
         self.actual_size: int = 0
         self.order_function: Callable = order_function
 
     # adds object at the end of the queue
-    def enqueue(self, new_element: Any) -> None:
+    def enqueue(self, new_element: Any):
         if self.is_empty():
             self.queue.append(new_element)
         else:
@@ -25,7 +25,7 @@ class PriorityQueue(object):
         self.actual_size += 1
 
     # removes object from the queue
-    def dequeue(self) -> None:
+    def dequeue(self):
         if not self.is_empty():
             self.queue.pop(0)
             self.actual_size -= 1
@@ -40,7 +40,7 @@ class PriorityQueue(object):
         return self.actual_size == 0
 
     # printing to console each queue eleement
-    def print_queue(self) -> None:
+    def print_queue(self):
         print("Queue actual size: {}, \nElements: ".format(self.actual_size))
         for elem in self.queue:
             print("-> {}".format(elem))

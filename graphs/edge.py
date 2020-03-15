@@ -12,8 +12,9 @@ class Edge(object):
         self.weight: int = weight
 
     # overriding of eqauls method
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other):
         return self.node_a == other.node_a and self.node_b == other.node_b and self.weight == other.weight
 
-    def __str__(self) -> str:
+    # overriding str method -> better edges printing
+    def __str__(self):
         return "{}  <-->  {}  |  w: {}".format(self.node_a, self.node_b, self.weight)

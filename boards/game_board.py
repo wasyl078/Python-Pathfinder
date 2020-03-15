@@ -14,13 +14,12 @@ class Game(object):
 
     # constructor - creates objects and stores variables
     # also initializes game frame
-    def __init__(self, players_color_or_png) -> None:
+    def __init__(self, players_color_or_png):
         # vars and consts
         self.tps_max = 30.0
         self.game_finished = False
         self.tps_clock = pygame.time.Clock()
         self.tps_delta = 0.0
-
         # initialization
         pygame.init()
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -32,16 +31,22 @@ class Game(object):
         self.initialize_player(players_color_or_png)
         self.initialize_enemy()
 
-    # making background blocks2
-    def initialize_level(self) -> None:
-        T = self.graphh.generate_prims_maze()
+    # makes background blocks
+    def initialize_level(self):
+        self.fill_background_with_wall_blocks()
+        self.create_maze()
+        self.create_background_frame()
 
+    # fills background with walls
+    def fill_background_with_wall_blocks(self):
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
                 self.matrix.set_block_to_wall(i, j)
 
-        # creating maze
-        for edge in T:
+    # uses generated edges (Prim's algorithm) to create "random maze"
+    def create_maze(self):
+        generated_edges = self.graphh.generate_prims_maze()
+        for edge in generated_edges:
             x1 = edge.node_a.x
             y1 = edge.node_a.y
             self.matrix.set_block_to_background(x1, y1)
@@ -49,7 +54,8 @@ class Game(object):
             y2 = edge.node_b.y
             self.matrix.set_block_to_background(x2, y2)
 
-        # creating Backgroung window borders
+    # creates frame (top, left, right, bottom border of window) of Backgorund blocks
+    def create_background_frame(self):
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             self.matrix.set_block_to_background(i, 0)
             self.matrix.set_block_to_background(i, NUMBER_OF_OF_BLOCKS[1] - 1)
@@ -57,8 +63,8 @@ class Game(object):
             self.matrix.set_block_to_background(0, i)
             self.matrix.set_block_to_background(NUMBER_OF_OF_BLOCKS[0] - 1, i)
 
-    # placing player in free spot
-    def initialize_player(self, players_color_or_png) -> None:
+    # places player in free spot
+    def initialize_player(self, players_color_or_png):
         x = random.randrange(0, NUMBER_OF_OF_BLOCKS[0])
         y = random.randrange(0, NUMBER_OF_OF_BLOCKS[1])
         if self.matrix.two_dim_list[x][y]:
@@ -67,8 +73,8 @@ class Game(object):
         else:
             return self.initialize_player(players_color_or_png)
 
-    # placing enemy in free spot
-    def initialize_enemy(self) -> None:
+    # places enemy in free spot
+    def initialize_enemy(self):
         x = random.randrange(0, NUMBER_OF_OF_BLOCKS[0])
         y = random.randrange(0, NUMBER_OF_OF_BLOCKS[1])
         if self.matrix.two_dim_list[x][y]:
@@ -77,24 +83,15 @@ class Game(object):
         else:
             return self.initialize_enemy()
 
-    # game loop is checking events (from keyboard, window) by calling objects' update()
-    # also calls render() and update()
-    def game_loop(self, actual_game, players_color_or_png) -> None:
+    # game loop is checking events (from keyboard, window) by calling objects' update() also calls render() and update()
+    def game_loop(self, actual_game, players_color_or_png):
         while not self.game_finished:
             # events handling
-            # exiting game
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-                    sys.exit()
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
-                    self.update()
-                    self.update()
-                    self.update()
-                    self.update()
-                    self.update()
+                    sys.exit()                                                  # press ESC to exit game
                 self.player.update_single_jump(self.matrix, self.moveable_objects, event)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
-                    # noinspection PyShadowingNames
                     actual_game = Game(players_color_or_png)
                     actual_game.game_loop(actual_game, players_color_or_png)     # press R to restart game
 
@@ -104,11 +101,11 @@ class Game(object):
                 self.update()
                 self.tps_delta -= 1 / self.tps_max
 
-            # render
+            # calls render
             self.render()
 
     # updates positions of every object
-    def update(self) -> None:
+    def update(self):
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):
                 self.matrix.two_dim_list[i][j].update(self.matrix, self.moveable_objects)
@@ -116,7 +113,7 @@ class Game(object):
             object_to_update.update(self.matrix, self.moveable_objects)
 
     # drawing every object
-    def render(self) -> None:
+    def render(self):
         self.screen.fill(Color.BLACK)
         for i in range(0, NUMBER_OF_OF_BLOCKS[0]):
             for j in range(0, NUMBER_OF_OF_BLOCKS[1]):

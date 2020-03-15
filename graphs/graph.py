@@ -16,7 +16,7 @@ class MyOwnGraph(object):
 
     # constructor receives estimated size of graph (width and height)
     # and generates the simplest mesh-like graph
-    def __init__(self, matrix: Matrix, columns: int, rows: int) -> None:
+    def __init__(self, matrix: Matrix, columns: int, rows: int):
         self.two_dim_list: List[List[AbtractBlock]] = matrix.two_dim_list
         self.columns: int = columns
         self.rows: int = rows

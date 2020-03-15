@@ -16,9 +16,13 @@ if __name__ == "__main__":
     actual_game.game_loop(actual_game, color_or_png)
 
 
-# TODO code refactor (e.x generator: for + if, comments, type hints)
+# TODO private variables
+# TODO ------------------------------constructor / updates and renders / helping methods------------------
+# TODO local moveable objects and matrix
+# TODO
 # TODO local multiplayer
-# TODO special blocks
+# TODO special blocks (path, increase bomb range)
+# TODO kicking bombs !
 # TODO new players pictures
 # TODO boards (game engine) refactor (as queue)
 # TODO code refactor

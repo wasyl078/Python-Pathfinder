@@ -15,12 +15,14 @@ class Node(object):
         self.f_score: float = 0
         self.h_score: float = 0
 
-    # overriding of just one equals method
+    # overriding of equal method - checks x and y
     def __eq__(self, other) -> bool:
         return self.x == other.x and self.y == other.y
 
+    # overriding str method -> better printing
     def __str__(self) -> str:
         return "Node({}, {})".format(self.x, self.y)
 
+    # overriding hash method
     def __hash__(self) -> int:
         return self.x + self.y * NUMBER_OF_OF_BLOCKS[1]
