@@ -16,7 +16,6 @@ if __name__ == "__main__":
     actual_game.game_loop(actual_game)
 
 
-# TODO local multiplayer
 # TODO special blocks (path, increase bomb range)
 # TODO kicking bombs !
 # TODO new players pictures

@@ -31,7 +31,7 @@ class Game(object):
         self.initialize_level()
         self.player_one = self.initialize_player(player_one_icon)
         self.player_two = self.initialize_player(player_two_icon)
-        #self.initialize_enemy()
+        self.initialize_enemy()
 
     # makes background blocks
     def initialize_level(self):
