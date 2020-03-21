@@ -11,7 +11,9 @@ Just download this repo into your hard drive, unpack it, run pytfinder.exe
 
 ## How to play
 Player 1: use WSAD for movement and space to place bombs
+
 Player 2: use arrows to move :arrow_up::arrow_down::arrow_left::arrow_right: and enter to place bombs
+
 If you both die, or you destroy your enemy, you can restart game by pressing key "R"
 
 ## Ingame screenshots
