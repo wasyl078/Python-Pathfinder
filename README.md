@@ -7,7 +7,9 @@ A* pathfinding algorithm allows enemy block to trace player block
 Prim's Minimal Spanding Tree algorithm is used to generate random maze in which you can move
 
 ## How to start playing game?
-Just download this repo into your hard drive, unpack it, run patfinder.exe
+Download build.zip, extract it, run pathfinder.exe
+For 23.03.2020 this file size is 45.6 MB
+You do not have to have Python 3.7 installed on your device, every necessary software is hidden inside
 
 ## How to play
 Player 1: use WSAD for movement and space to place bombs
