@@ -8,7 +8,9 @@ Prim's Minimal Spanding Tree algorithm is used to generate random maze in which 
 
 ## How to start playing game?
 Download build.zip, extract it, run pathfinder.exe
+
 For 23.03.2020 this file size is 45.6 MB
+
 You do not have to have Python 3.7 installed on your device, every necessary software is hidden inside
 
 ## How to play
