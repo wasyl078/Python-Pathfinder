@@ -2,7 +2,7 @@ from cx_Freeze import setup, Executable
 
 includefiles = ['blocks/', 'boards/', 'general/', 'graphs/', 'pictures/']
 includes = []
-excludes = []
+excludes = ['numpy', 'test', 'tkinter']
 packages = ['pygame']
 
 setup(
