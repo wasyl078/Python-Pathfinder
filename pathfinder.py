@@ -14,11 +14,3 @@ if __name__ == "__main__":
     p1_icon, p2_icon = actual_game.game_setup_loop()
     actual_game = Game(p1_icon, p2_icon)
     actual_game.game_loop(actual_game)
-
-
-# TODO special blocks (path, increase bomb range)
-# TODO kicking bombs !
-# TODO new players pictures
-# TODO boards (game engine) refactor (as queue)
-# TODO code refactor
-# TODO over network multiplayer
